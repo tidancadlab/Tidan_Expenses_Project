@@ -1,0 +1,35 @@
+.darkLogo {
+    content: url(../../Images/LogoTidanDark.svg);
+}
+
+.lightLogo {
+    content: url(../../Images/LogoTidanLight.svg);
+}
+
+.Active {
+    padding-left: 6px;
+    padding-right: 6px;
+    border-radius: 4px;
+}
+
+.notActive {
+    padding-left: 6px;
+    padding-right: 6px;
+    border-radius: 4px;
+
+}
+
+.avatar1 {
+    background-image: url(../../Images/avtars.png);
+    background-position: 1150px 83px;
+    background-size: 100px;
+}
+
+@media screen and (max-width:1040px) {
+
+    .avatar1 {
+        background-image: url(../../Images/avtars.png);
+        background-position: 1156px 92px;
+        background-size: 110px;
+    }
+}

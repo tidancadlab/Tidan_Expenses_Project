@@ -1,0 +1,112 @@
+{
+    "navItem": [
+        {
+            "home": "Home",
+            "link": "/"
+        },
+        {
+            "home": "Price",
+            "link": "/Price"
+        },
+        {
+            "home": "Blog",
+            "link": "/Blog"
+        },
+        {
+            "home": "About US",
+            "link": "/About-us"
+        },
+        {
+            "home": "Contact Us",
+            "link": "/Contact-us"
+        },
+        {
+            "home": "Log in",
+            "link": "/Login"
+        }
+    ],
+    "sideBarItem": [
+        {
+            "Name": "Dashboard",
+            "link": "dashboard"
+        },
+        {
+            "Name": "Expenses",
+            "link": "expenses"
+        },
+        {
+            "Name": "Approval",
+            "link": "approval"
+        },
+        {
+            "Name": "Graph",
+            "link": "graph"
+        },
+        {
+            "Name": "Help",
+            "link": "help"
+        }
+    ],
+    "images": [
+        {
+            "image": "images/Frame 7.png",
+            "id": 261516,
+            "type": true,
+            "heading": "Management Fund",
+            "hClass": "bg-blue-400 text-blue-800  ",
+            "pClass": "bg-blue-800 text-blue-100",
+            "btnClass": "hover:bg-blue-700",
+            "continent": "The Cannot access before initialization error occurs when a variable declared using let or const is accessed before it was initialized in the scope. To solve the error, make sure to initialize the variable before accessing it. Here are some examples of how the error occurs. index.js"
+        },
+        {
+            "image": "images/Frame_1.png",
+            "id": 651651951,
+            "type": true,
+            "heading": "Approval System",
+            "hClass": "bg-orange-700 text-orange-200",
+            "pClass": " border-orange-600 bg-orange-200 text-[#ffcc00]",
+            "btnClass": "hover:bg-orange-700  active:bg-orange-300",
+            "continent": "The school fair is right around the corner, and tickets have just gone on sale. Even though you may be busy, you will still want to reserve just one day out of an entire year to relax and have fun with us. Even if you dont have much money, you dont have to worry."
+        },
+        {
+            "image": "images/Frame_2.png",
+            "id": 620651165,
+            "type": true,
+            "heading": "Track Expenses",
+            "hClass": "bg-orange-700 text-orange-200",
+            "pClass": " border-orange-600 bg-orange-200 text-[#ffcc00]",
+            "btnClass": "hover:bg-red-500",
+            "continent": "The school fair is right around the corner, and tickets have just gone on sale. We are selling a limited number of tickets at a discount, so move fast and get yours while they are still available. This is going to be an event you will not want to miss! First off, the school fair is a great value when compared with other forms of entertainment. Also, your ticket purchase will help our school, and when you help the school, it helps the entire community. But that’s not all! Every ticket you purchase enters you in a drawing to win fabulous prizes. And don’t forget, you will have mountains of fun because there are acres and acres of great rides, fun games, and entertaining attractions! Spend time with your family and friends at our school fair. Buy your tickets now!   "
+        },
+        {
+            "image": "images/Frame_3.png",
+            "id": 60651919,
+            "type": true,
+            "heading": "Record Expenses",
+            "hClass": "bg-orange-700 text-orange-200",
+            "pClass": " border-orange-600 bg-orange-200 text-[#ffcc00]",
+            "btnClass": "hover:bg-pink-500",
+            "continent": "The school fair is right around the corner, and tickets have just gone on sale. Even though you may be busy, you will still want to reserve just one day out of an entire year to relax and have fun with us. Even if you dont have much money, you dont have to worry."
+        },
+        {
+            "image": "images/Frame 4.png",
+            "id": 65602023,
+            "type": true,
+            "heading": "Projects Use",
+            "hClass": "bg-orange-700 text-orange-200",
+            "pClass": " border-orange-600 bg-orange-200 text-[#ffcc00]",
+            "btnClass": "hover:bg-[#a9cc00]",
+            "continent": "The school fair is right around the corner, and tickets have just gone on sale. Even though you may be busy, you will still want to reserve just one day out of an entire year to relax and have fun with us. Even if you dont have much money, you dont have to worry."
+        },
+        {
+            "image": "images/Frame 5.png",
+            "id": 3201061,
+            "type": true
+        },
+        {
+            "image": "images/Frame 6.png",
+            "id": 3201061,
+            "type": true
+        }
+    ]
+}
