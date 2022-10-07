@@ -47,7 +47,7 @@ function LoginPage() {
                             </div>
                             <div className="w-full flex -mt-3 flex-col items-start">
                                 <button className="border border-violet-800 w-full my-1 p-2 bg-violet-400 text-violet-800 rounded-md" type="submit">Login</button>
-                                <a className="text-blue-700 hover:underline" href="#">Forget password</a>
+                                <a onClick={(e)=>{e.preventDefault()}} className="text-blue-700 hover:underline" href="/#">Forget password</a>
                             </div>
                         </form>
                         <div className="flex -mt-7 flex-wrap relative rounded gap-5 w-full p-5">

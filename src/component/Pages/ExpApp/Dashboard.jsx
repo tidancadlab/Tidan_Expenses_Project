@@ -21,6 +21,7 @@ function DashBoard(props) {
                                 <h1>30000</h1>
                             </div>
                         </div>
+                        
                     </div>
                     <div className="bg-stone-700 text-white dark:text-black dark:bg-cyan-500 p-2 max-w-xs rounded-md w-full">
                         <h1 className="text-2xl">Approval Status</h1>

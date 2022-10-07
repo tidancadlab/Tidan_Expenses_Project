@@ -5,10 +5,8 @@ const HomeFirst = ({ data }) => {
 
     const imagesData = data.images;
     const [nextBtn, setNextBtn] = useState(1)
-    const [opct, setOpct] = useState("")
 
     const nxtBtn = () => {
-        setOpct("top-10 absolute")
         setNextBtn(nextBtn => nextBtn > imagesData.length - 2 ? 1 : nextBtn + 1)
     }
 

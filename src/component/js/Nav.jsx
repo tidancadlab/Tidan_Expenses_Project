@@ -23,20 +23,23 @@ const Nav = (props) => {
     return (
         <>
             <div className=' dark:bg-slate-800 bg-slate-300 z-10 w-full fixed'>
-                <nav className={`ease-linear px-36 upto-lab-s:px-2 duration-200 dark:bg-gray-700 bg-gray-200 upto-lab-s:justify-between  justify-between h-[80px] upto-lab-s:h-10 flex items-center w-full`}>
-                    <div className={'flex scrn-lap-S:w-[500px] min-w-max items-center upto-lab-s:gap-3 gap-9'}>
-                        <CustomLink to="/" className="bg-none"><div className={` ${darkMode === "dark" ? 'lightLogo' : 'darkLogo'} upto-lab-s:w-16 upto-lab-s:h-4 h-8  w-32`}></div></CustomLink>
-                        <div onClick={() => { setNavBar(true) }} className={` ${navBar ? "upto-lab-s:-left-1/2" : "upto-lab-s:left-1"}  upto-lab-s:bg-violet-300 ease-linear duration-200 upto-lab-s:absolute upto-lab-s:top-12 upto-lab-s:p-5 upto-lab-s:border upto-lab-s:border-emerald-500 upto-lab-s:rounded-lg upto-lab-s:dark:bg-black `}>
-                            <ul className='flex text-xl upto-lab-s:flex-col upto-lab-s:text-violet-700 upto-lab-s:items-start gap-5 upto-lab-s:gap-4 dark:text-white'>
-                                {navItems.map((navItems, indx) => {
-                                    return (
-                                        <li key={indx} className="flex" ><CustomLink to={navItems.link}>{navItems.home}</CustomLink></li>
-                                    )
-                                })}
-                            </ul>
-                        </div>
+                <nav className={`ease-linear upto-lab-s:px-2 duration-200 justify-center dark:bg-gray-700 bg-gray-200 upto-lab-s:justify-between upto-lab-s:gap-2 gap-5 h-16 upto-lab-s:h-10 flex items-center w-full`}>
+                    <div className={'flex min-w-max items-center upto-lab-s:gap-3 gap-9'}>
+                        <CustomLink to="/" className="bg-none">
+                            <div className={` ${darkMode === "dark" ? 'lightLogo' : 'darkLogo'} upto-lab-s:w-16 upto-lab-s:h-4 h-8  w-32`}>
+                            </div>
+                        </CustomLink>
                     </div>
-                    <div className='relative upto-lab-s:w-full upto-lab-s:min-w-[250px] min-w-[300px] h-10 upto-lab-s:h-8 scrn-mob:max-w-[200px] dark:border-none'>
+                    <div onClick={() => { setNavBar(true) }} className={` ${navBar ? "upto-lab-s:-left-1/2" : "upto-lab-s:left-1"}  upto-lab-s:bg-violet-300 ease-linear duration-200 upto-lab-s:absolute upto-lab-s:top-12 upto-lab-s:p-5 upto-lab-s:border upto-lab-s:border-emerald-500 upto-lab-s:rounded-lg upto-lab-s:dark:bg-black `}>
+                        <ul className='flex text-xl upto-lab-s:flex-col upto-lab-s:text-violet-700 upto-lab-s:items-start gap-5 upto-lab-s:gap-4 dark:text-white'>
+                            {navItems.map((navItems, indx) => {
+                                return (
+                                    <li key={indx} className="flex" ><CustomLink to={navItems.link}><span className=' inline-block text-sm'>{navItems.home}</span></CustomLink></li>
+                                )
+                            })}
+                        </ul>
+                    </div>
+                    <div className='relative upto-lab-s:w-full max-w-3xl upto-lab-s:min-w-[250px] w-full h-10 upto-lab-s:h-8 scrn-mob:max-w-[200px] dark:border-none'>
                         <input className='h-full pr-12 border-red-400 border dark:border-none w-full px-5 scrn-mob:max-w-fit rounded outline-none dark:bg-gray-500 bg-gray-100 text-black dark:text-white placeholder:text-sm focus:bg-gray-400 focus:text-violet-900 placeholder:text-gray-500 placeholder:dark:text-white' type="text" name="Search" placeholder='SEARCH' id="" />
                         <div className='absolute cursor-pointer flex items-center justify-center rounded-r w-10 h-full active:bg-red-300 ease-in-out duration-150 bg-red-400 top-1/2 right-0 -translate-y-1/2'><BsSearch className='dark:fill-white' /></div>
                     </div>
@@ -54,7 +57,7 @@ const Nav = (props) => {
             </div>
 
             <div className='h-20 upto-lab-s:h-10 w-full'></div>
-            <Outlet/>
+            <Outlet />
         </>
     );
 }

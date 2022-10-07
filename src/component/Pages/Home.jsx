@@ -8,6 +8,8 @@ import LoginPage from './Login';
 import AppExpenses from './ExpApp/AppExpenses';
 import DashBoard from './ExpApp/Dashboard';
 import AddExpenses from './ExpApp/AddExpenses';
+import Error404 from '../js/Err404';
+import Help from './ExpApp/Help';
 
 
 
@@ -27,16 +29,23 @@ function NavBar() {
         <>
             <div className={` ${darkMode === "dark" ? "light" : "dark"}`}>
                 <Routes>
+                    <Route path="*" element={<Error404 />} />
                     <Route path='' element={<Nav setDarkMode={setDarkMode} CustomLink={CustomLink} darkMode={darkMode} data={LocalData} />} >
                         <Route path="/" element={<HomeFirst data={LocalData} />} />
-                        <Route path="*" element={<Navigate to='/' />} />
                         <Route path="/Login" element={<LoginPage />} />
                     </Route>
-                        <Route path="/Price" element={<AppExpenses data={LocalData} darkMode={darkMode} setDarkMode={setDarkMode} CustomLink={CustomLink} />} >
-                            <Route path="/Price/:id" element={<DashBoard data={LocalData} CustomLink={CustomLink} />} />
-                            <Route path="*" element={<Navigate to="/Price/Dashboard" />} />
-                            <Route path="/Price/expenses" element={<AddExpenses />} />
-                        </Route>
+                    <Route path="/Price" element={<AppExpenses
+                        data={LocalData}
+                        darkMode={darkMode}
+                        setDarkMode={setDarkMode}
+                        CustomLink={CustomLink} />} >
+                        <Route path="/Price/dashboard" element={<DashBoard data={LocalData} CustomLink={CustomLink} />} />
+                        <Route path="*" element={<Navigate to="/Price/Dashboard" />} />
+                        <Route path="/Price/expenses" element={<AddExpenses />} />
+                        <Route path="/Price/approval" element={<AddExpenses />} />
+                        <Route path="/Price/graph" element={<AddExpenses />} />
+                        <Route path="/Price/help" element={<Help />} />
+                    </Route>
                 </Routes>
             </div>
         </>

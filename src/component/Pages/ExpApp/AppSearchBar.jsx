@@ -1,47 +1,63 @@
 import { useState } from "react";
-import { BsCaretDownFill, BsCaretUpFill, BsEmojiSunglassesFill } from "react-icons/bs";
+import { BsCaretDownFill, BsCaretUpFill, BsEmojiSunglassesFill, BsSearch } from "react-icons/bs";
 import { IoIosLogOut } from "react-icons/io";
-import avatar from '../../../Images/avtars.png'
+import { GoThreeBars } from 'react-icons/go'
+import { AiOutlineClose } from 'react-icons/ai'
 
 function AppSearchBar(props) {
     const CustomLink = props.CustomLink;
     const darkMode = props.darkMode;
-    const setDarkMode=props.setDarkMode;
+    const setDarkMode = props.setDarkMode;
+    const setSideBarExtendBtn = props.setSideBarExtendBtn;
+    const sideBarExtendBtn = props.sideBarExtendBtn;
     const [profileDrop, setProfileDrop] = useState(false)
     return (<>
-        <div className="bg-gray-500 dark:bg-slate-700 dark:text-white w-full px-4 flex upto-lab-s:h-12 h-20">
-            <div className="flex justify-between w-full items-center">
-                <div className="">
-                    <CustomLink to='/' className='darkLogo upto-lab-s:h-4 h-6'></CustomLink>
-                </div>
-                <div className="h-10 upto-lab-s:h-8 dark:text-white">
-                    <input type="text" name="" id="" className="max-w-xl pl-3 pr-12  dark:bg-slate-500 upto-lab-s:w-44 w-80 outline-none rounded h-full" />
-                </div>
-                <div>
-                    <div onClick={() => setDarkMode(darkMode => darkMode === "dark" ? "light" : "dark")} className="relative w-8 h-4 bg-red-500 rounded-full">
-                        <span className={` ${darkMode === "dark"? "left-1" : "left-4"} ease-in-out duration-150 absolute w-3 h-3 rounded-full bg-black top-1/2 -translate-y-1/2`}></span>
+        <div className="bg-[#F26666] dark:bg-slate-700 dark:text-white w-full upto-lab-s:px-1 px-4 flex upto-lab-s:h-12 h-14">
+            <div className="flex w-full upto-lab-s:gap-2 gap-5 items-center">
+                <div className="flex flex-row upto-lab-s:gap-2 gap-5 items-center">
+                    <div className="upto-lab-s:hidden">
+                        <div
+                            onClick={() => { setSideBarExtendBtn(sideBarExtendBtn => sideBarExtendBtn ? false : true) }}
+                            className='dark:hover:text-black rounded-full w-10 h-10 flex justify-center items-center cursor-pointer hover:bg-slate-400 my-2 text-2xl ease-in-out duration-150'>
+                            {!sideBarExtendBtn ? <GoThreeBars /> : <AiOutlineClose />}
+                        </div>
+                    </div>
+                    <CustomLink to='/' className={` ${darkMode === "dark" ? "lightLogo" : "darkLogo"} upto-lab-s:h-4 h-6`}></CustomLink>
+                    <div
+                        onClick={() => setDarkMode(darkMode => darkMode === "dark" ? "light" : "dark")}
+                        className={`${darkMode === "dark" ? "bg-white" : "bg-black"} cursor-pointer border relative w-8 h-4 rounded-full`} >
+                        <span className={` ${darkMode === "dark" ? "left-1 border-black" : "left-4 bg-white"} border ease-in-out duration-150 absolute w-3 h-3 rounded-full bg-black top-1/2 -translate-y-1/2`}></span>
                     </div>
                 </div>
+                <div className='relative upto-lab-s:w-full upto-lab-s:min-w-[250px] w-full h-10 upto-lab-s:h-8 scrn-mob:max-w-[200px] dark:border-none'>
+                    <input
+                        className='h-full pr-12 border-violet-200 border dark:border-none w-full px-5 scrn-mob:max-w-fit rounded outline-none bg-transparent dark:bg-gray-500 text-black dark:text-white placeholder:text-sm focus:border-green-400 focus:text-violet-900 placeholder:text-white placeholder:dark:text-white'
+                        type="text"
+                        name="Search"
+                        placeholder='Search'
+                        id="" />
+                    <div className='absolute cursor-pointer flex items-center justify-center rounded-r w-10 h-full active:bg-red-300 ease-in-out duration-150 hover:bg-red-400 top-1/2 right-0 -translate-y-1/2'><BsSearch className='dark:fill-white' /></div>
+                </div>
+                {/* User Details */}
                 <div
-                    className="relative">
+                    className="relative max-w-[180px] upto-lab-s:w-fit w-full">
                     <div
                         tabIndex="0"
                         onBlur={() => {
-                            const abbcc = setInterval(() => {
+                            setTimeout(() => {
                                 setProfileDrop(false)
-                                clearInterval(abbcc)
-                            }, 20);
+                            }, 100);
                         }}
                         onClick={() => { setProfileDrop(profileDrop => profileDrop ? false : true) }}
                         className="flex items-center gap-1 cursor-pointer bg-gray-900 upto-lab-s:pr-0 pr-6 pl-px upto-lab-s:pl-0 upto-lab-s:py-0 py-px rounded-full">
-                        <span className=" avatar1 w-7 upto-lab-s:w-8 upto-lab-s:h-8 flex justify-center items-center h-7 rounded-full border m-[2px] upto-lab-s:m-0 border-black dark:border-white">
+                        <span className=" avatar1 w-7 upto-lab-s:w-8 upto-lab-s:h-8 flex justify-center items-center h-7 rounded-full m-[2px] upto-lab-s:m-0 border-black dark:border-white">
                         </span>
-                        <span className="upto-lab-s:hidden">Praveen Kumar</span>
-                        <span className="absolute bottom-2 right-1 upto-lab-s:hidden">{!profileDrop ? <BsCaretDownFill /> : <BsCaretUpFill />}</span>
+                        <span className="upto-lab-s:hidden text-white">Praveen Kumar</span>
+                        <span className="absolute bottom-2 right-1 upto-lab-s:hidden text-white">{!profileDrop ? <BsCaretDownFill /> : <BsCaretUpFill />}</span>
                     </div>
                     {
-                        profileDrop && <div className="absolute top-10 upto-lab-s:right-0 flex gap-2 flex-col items-start w-44 py-5 pb-0 rounded-md bg-white dark:bg-gray-600 dark:text-white">
-                            <div className=" px-5 py-3 upto-lab-s:py-1 w-full hover:bg-violet-600 bg-stone-700 upto-lab-s:bg-gray-700 flex flex-col items-start cursor-pointer">
+                        profileDrop && <div className=" text-white absolute top-10 upto-lab-s:right-0 flex gap-1 flex-col items-start w-44 pb-0 rounded-md bg-white dark:bg-gray-600 dark:text-white">
+                            <div className="px-5 py-3 rounded-t-md upto-lab-s:py-1 w-full hover:bg-violet-600 bg-stone-700 upto-lab-s:bg-gray-700 flex flex-col items-start cursor-pointer">
                                 <span className="hidden upto-lab-s:flex">Praveen Kumar</span>
                                 <p className="cursor-pointer upto-lab-s:opacity-75 upto-lab-s:text-sm -mt-1 flex items-center gap-2 upto-lab-s:gap-1"><BsEmojiSunglassesFill /> Profile</p>
                             </div>
