@@ -1,13 +1,9 @@
-
-
 function AddExpenses() {
-    return ( 
-        <>
-        <div>
-            Hello
-        </div>
-        </>
-     );
+  return (
+    <>
+      <div>Hello</div>
+    </>
+  );
 }
 
 export default AddExpenses;
