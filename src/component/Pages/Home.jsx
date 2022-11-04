@@ -18,6 +18,7 @@ import AddExpenses from "./ExpApp/AddExpenses";
 import Error404 from "../js/Err404";
 import Help from "./ExpApp/Help";
 import Approval from "./ExpApp/Approval";
+import Graph from "./ExpApp/Graph";
 
 function NavBar() {
   const [darkMode, setDarkMode] = useState(localStorage.getItem("DarkMode"));
@@ -77,9 +78,9 @@ function NavBar() {
               element={<DashBoard data={LocalData} CustomLink={CustomLink} />}
             />
             <Route path="*" element={<Navigate to="/Price/Dashboard" />} />
-            <Route path="/Price/expenses" element={<AddExpenses />} />
+            <Route path="/Price/expenses" element={<AddExpenses expTransaction={LocalData.expTransaction} />} />
             <Route path="/Price/approval" element={<Approval expTransaction={LocalData.expTransaction} />} />
-            <Route path="/Price/graph" element={<AddExpenses />} />
+            <Route path="/Price/graph" element={<Graph/>} />
             <Route path="/Price/help" element={<Help />} />
           </Route>
         </Routes>

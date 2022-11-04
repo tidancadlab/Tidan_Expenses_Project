@@ -9,8 +9,6 @@ function LoginPage() {
   const [emailInput, setEmailInput] = useState();
   const [passwordInput, setPasswordInput] = useState();
 
-  console.log(emailInput);
-
   return (
     <>
       <div className="h-[calc(100vh-80px)] min-h-[800px] w-screen relative bg-gray-400 dark:bg-gray-600">
@@ -27,7 +25,7 @@ function LoginPage() {
                 </h1>
               </div>
               <form
-                action="submit"
+                method="GET"
                 className="flex flex-wrap relative rounded gap-8 w-full p-5"
               >
                 <div className="relative w-full">

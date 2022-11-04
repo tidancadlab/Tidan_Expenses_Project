@@ -14,9 +14,9 @@ function SideBar(props) {
       <Link
         className={` ${
           isActive
-            ? "dark:border-black border-orange-600 bg-violet-600 upto-lab-s:bg-transparent text-white"
-            : "border-transparent text-black"
-        } upto-lab-s:border-t-2 upto-lab-s:w-16`}
+            ? "dark:border-black border-orange-600 bg-violet-600 upto-lab-s:bg-transparent text-white upto-lab-s:text-orange-600 upto-lab-s:rounded-none rounded-lg upto-lab-s:shadow-none shadow-md upto-lab-s:translate-x-0 translate-x-5"
+            : "border-transparent text-black hover:bg-gray-900 hover:upto-lab-s:bg-gray-300"
+        } upto-lab-s:border-t-2 upto-lab-s:w-16 ease-in-out duration-300`}
         to={to}
         {...props}
       >
@@ -31,23 +31,17 @@ function SideBar(props) {
         className={`upto-lab-s:bottom-0 upto-lab-s:fixed upto-lab-s:w-full ease-in-out duration-300 fixed`}
       >
         <div
-          className={` ${
-            sideBarExtendBtn ? "" : ""
-          } h-[calc(100vh-64px)] upto-lab-s:justify-around upto-lab-s:items-stretch items-center upto-lab-s:p-0 ease-in-out duration-100 flex flex-col bg-blue-500 dark:bg-gray-800 upto-lab-s:w-full upto-lab-s:h-fit upto-lab-s:pt-1 py-5`}
+          className={`h-[calc(100vh-64px)] upto-lab-s:justify-around upto-lab-s:items-stretch items-center upto-lab-s:p-0 ease-in-out duration-100 flex flex-col bg-blue-100 dark:bg-gray-800 upto-lab-s:w-full upto-lab-s:h-fit upto-lab-s:pt-1 py-5`}
         >
-          <div className="flex flex-col upto-lab-s:justify-around upto-lab-s:flex-row text-white dark:text-black gap-3 upto-lab-s:gap-1 upto-lab-s:p-0">
+          <div className="flex flex-col upto-lab-s:justify-around upto-lab-s:flex-row text-white dark:text-black upto-lab-s:gap-1 upto-lab-s:p-0">
             {sideNavItem.map((item, index) => {
               return (
                 <CustomLink to={item.link} key={index}>
                   <ul
-                    className={` ${
-                      sideBarExtendBtn ? "" : "justify-start"
-                    } upto-lab-s:py-1 p-4 upto-lab-s:justify-center justify-center flex`}
+                    className={`upto-lab-s:py-1 p-4 upto-lab-s:justify-center justify-center  flex`}
                   >
                     <li
-                      className={` ${
-                        sideBarExtendBtn ? "" : "flex-col text-xs gap-0"
-                      } ease-in duration-100 flex gap-2 justify-center items-center text-xl`}
+                      className={`ease-in duration-100 flex flex-col justify-center items-center dark:text-white`}
                     >
                       {item.Name === "Dashboard" ? (
                         <AiFillDashboard className="text-3xl upto-lab-s:text-xl" />

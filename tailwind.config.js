@@ -20,5 +20,6 @@ module.exports = {
       'upto-lab-s': {'max': '1040px', 'min': '0px'},
     },
   },
+  important: true,
   plugins: [],
 }

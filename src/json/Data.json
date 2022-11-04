@@ -111,38 +111,42 @@
     ],
     "expTransaction": [
         {
-          "id": "9e0eb006-7052-4a2a-a454-3c480cfc4870",
-          "Date": "13-09-2022",
+          "id": 1664236800000,
+          "Date": 1664236800000,
           "Amount": 55630,
           "Biller": "Amazon.in",
           "Item": "i7 11th Gen 15 inch Laptop",
           "Approval": "Doraha",
-          "billFile": "Not Enclosed",
+          "billFile": "",
           "Remark": "This Laptop for new Project Only",
+          "uploadedBy" : "Praveen Kumar",
           "approvalTrans": "Approved",
           "commentApproval": ""
         },
         {
-          "id": "cfd03520-e4b0-4aec-b5ba-cdc6ceb8c9ea",
-          "Date": " 14-09-2022",
+          "id": 1664236800000,
+          "Date": 1665446400000,
           "Amount": 25000,
           "Biller": "Mukesh Kumar",
           "Item": "Samsung mobile",
           "Approval": "BCPL",
-          "billFile": "Not Enclosed",
+          "billFile": "",
           "Remark": "This is for office use only",
+          "uploadedBy" : "Praveen Kumar",
           "approvalTrans": "Approved",
           "commentApproval": ""
         },
         {
           "id": "664a58d4-c16a-4fc6-9fb1-c34a9e907965",
-          "Date": "2022-09-06",
+          "Date": 1666915200000,
           "Amount": 890,
           "Biller": "Filipkart.com",
           "Item": "Machar Dani",
           "Approval": "BCPL",
-          "billFile": "C:\\fakepath\\redBus revamp 1.pdf",
+          "billFile": "redBus revamp 1.pdf",
           "Remark": "This is for Home use Only",
+          "uploadedOn" : 1425512500000,
+          "uploadedBy" : "Praveen Kumar",
           "approvalTrans": "Approved",
           "commentApproval": ""
         },
@@ -153,8 +157,9 @@
           "Biller": "Bikaner Misthan",
           "Item": "2Kg Sweet",
           "Approval": "RBPL",
-          "billFile": "C:\\fakepath\\redBus revamp.pdf",
+          "billFile": "redBus revamp.pdf",
           "Remark": "This is for site use",
+          "uploadedBy" : "Praveen Kumar",
           "approvalTrans": "Rejected",
           "commentApproval": ""
         },
@@ -165,8 +170,9 @@
           "Biller": "Rohan Kumar",
           "Item": "5 Nos Valve Chmaber",
           "Approval": "RBPL",
-          "billFile": "Not Enclosed",
+          "billFile": "",
           "Remark": "This item use in MDPE Works",
+          "uploadedBy" : "Praveen Kumar",
           "approvalTrans": "Approved",
           "commentApproval": ""
         },
@@ -177,8 +183,9 @@
           "Biller": "RamJeet Singh",
           "Item": "5Dys Welding Works",
           "Approval": "RBPL",
-          "billFile": "Not Enclosed",
+          "billFile": "",
           "Remark": "This is about Welding Works",
+          "uploadedBy" : "Praveen Kumar",
           "approvalTrans": "Rejected",
           "commentApproval": "This is not Approved"
         },
@@ -189,8 +196,9 @@
           "Biller": "Kavita",
           "Item": "Makup",
           "Approval": "RBPL",
-          "billFile": "Not Enclosed",
+          "billFile": "",
           "Remark": "md ekd enj",
+          "uploadedBy" : "Praveen Kumar",
           "approvalTrans": "Rejected",
           "commentApproval": ""
         },
@@ -201,8 +209,9 @@
           "Biller": "Kavita",
           "Item": "Medicines",
           "Approval": "RBPL",
-          "billFile": "Not Enclosed",
-          "Remark": "This is for Site only\n",
+          "billFile": "",
+          "Remark": "This is for Site only",
+          "uploadedBy" : "Praveen Kumar",
           "approvalTrans": "Approved",
           "commentApproval": "This is Also Approved"
         },
@@ -213,8 +222,9 @@
           "Biller": "Dinesh Jangid",
           "Item": "Structure Steel Works",
           "Approval": "RBPL",
-          "billFile": "Not Enclosed",
+          "billFile": "",
           "Remark": "Under Rbpl works",
+          "uploadedBy" : "Praveen Kumar",
           "approvalTrans": "Approved",
           "commentApproval": "This is Comment"
         },
@@ -225,8 +235,9 @@
           "Biller": "Ajay Sharma",
           "Item": "As Built Drawing",
           "Approval": "RBPL",
-          "billFile": "Not Enclosed",
-          "Remark": "site work"
+          "billFile": "",
+          "Remark": "site work",
+          "uploadedBy" : "Praveen Kumar"
         },
         {
           "id": "67a4f253-005d-44a0-8a62-2b12f4c99780",
@@ -235,8 +246,9 @@
           "Biller": "Ram SIngh",
           "Item": "321654",
           "Approval": "RBPL",
-          "billFile": "Not Enclosed",
-          "Remark": ""
+          "billFile": "",
+          "Remark": "",
+          "uploadedBy" : "Praveen Kumar"
         },
         {
           "id": "67a4f253-005d-44a0-8a62-2b12f4c99780",
@@ -245,8 +257,20 @@
           "Biller": "Ram SIngh",
           "Item": "321654",
           "Approval": "RBPL",
-          "billFile": "Not Enclosed",
-          "Remark": ""
+          "billFile": "",
+          "Remark": "",
+          "uploadedBy" : "Praveen Kumar"
+        },
+        {
+          "id": "67a4f253-005d-44a0-8a62-2b12f4c99780",
+          "Date": "2022-09-22",
+          "Amount": 2562,
+          "Biller": "Ram SIngh",
+          "Item": "321654",
+          "Approval": "RBPL",
+          "billFile": "",
+          "Remark": "",
+          "uploadedBy" : "Praveen Kumar"
         }
       ]
 }

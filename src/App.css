@@ -13,6 +13,12 @@
   }
 }
 
+.active-btn{
+  border: 1px solid;
+  display: flex;
+  justify-content: center !important; 
+  align-items: center;
+}
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -23,16 +29,8 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

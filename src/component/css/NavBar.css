@@ -50,24 +50,14 @@ body {
   }
 }
 
-.dataDiv li {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  max-width: -moz-fit-content;
-  width: 100%;
-  text-align: left;
-  padding-left: 10px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;  
+.dataDiv ul{
+  box-shadow: 1px 1px 5px rgba(177, 25, 25, 0.493);
 }
 
-.dataDiv ul:nth-child(even) {
-  background: white;
-  color: black;
-}
-.dataDiv ul:nth-child(odd) {
-  /* background: rgb(73, 13, 13); */
+.dataDiv li {
+  display: flex;
+  justify-content: flex-start;
+  max-width: 100%;
+  text-align: left;
+  padding-left: 10px;
 }
