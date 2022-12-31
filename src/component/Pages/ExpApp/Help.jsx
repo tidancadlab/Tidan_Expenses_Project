@@ -1,8 +1,9 @@
-function Help() {
+function Help({titleName}) {
+  // titleName.innerHTML = "Help Section"
   return (
     <>
-      <div className="min-h-[calc(100vh+156px)] w-screen dark:bg-gray-700 bg-gray-300 dark:text-white flex items-center justify-center">
-        <div className="max-w-sm p-8 bg-yellow-500 dark:bg-violet-800 rounded w-full">
+      <div className="min-h-[calc(100vh-56px)] dark:bg-gray-900 bg-gray-300 dark:text-white flex items-center justify-center">
+        <div className="max-w-sm p-8 bg-yellow-500 shadow-2xl dark:shadow-black dark:bg-violet-800 rounded w-full">
           <form action="submit" className="">
             <div className="flex flex-col gap-2">
               <div>
@@ -42,10 +43,10 @@ function Help() {
               </div>
               <div className="w-full rounded">
                 <textarea
-                  className="w-full outline-none text-black px-2 focus:bg-green-200 rounded"
+                  className="w-full min-h-[200px] py-2 outline-none text-black px-2 focus:bg-green-200 rounded"
                   type="text"
                   name="issue"
-                  placeholder="Issue in detail"
+                  placeholder="Issue in detail..."
                   id=""
                   required
                 />

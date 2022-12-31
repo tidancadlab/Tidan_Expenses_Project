@@ -1,25 +1,62 @@
-import { useState } from "react";
+import React from "react";
+import { Line } from "react-chartjs-2";
+import { CategoryScale } from "chart.js";
+import Chart from "chart.js/auto";
+import axios from "axios";
+import moment from "moment";
+import tableBGImg from "../../../Images/Tabletlogin.svg";
+import ProgressRound from "./contenet/PropgressRound";
+import AddNewExpenses from "./contenet/AddExpensesPage";
+Chart.register(CategoryScale);
 
-function Graph() {
-  const [crpto, setCrpto] = useState([]);
-  fetch("https://techcrunch.com/wp-json/wp/v2/posts?per_page=100&context=embed")
-    .then((response) => response.json())
-    .then((data) => setCrpto(data))
-    .catch((error) => console.log("error", error));
+let date = [];
+let amount = [];
 
-    // console.log(crpto);
+axios
+  .get("/addExpenses")
+  .then((res) => {
+    for (const dataObj of res.data) {
+      date.push(moment(dataObj.expDate).format("DD/M"));
+      amount.push(parseInt(dataObj.expAmount));
+    }
+  })
+  .catch((err) => {
+    console.log("Server not working to push the data", err.response.status);
+  });
+
+function Graph({ titleName }) {
+  titleName.innerHTML = "DATA Graph";
+
+
+
   return (
     <>
-      <div className="flex flex-wrap">
-        {crpto.map(data => {
-          return (
-            <>
-            <div className="flex w-[600px] h-[300px] m-auto">
-            <img className=" " src={data.jetpack_featured_media_url} alt="" />
-            </div>
-            </>
-          )
-        })}
+      <div className="m-auto w-screen h-screen flex justify-center bg-black">
+        {/* <Line
+          data={{
+            labels: date,
+            datasets: [
+              {
+                label: "Expenses",
+                data: amount,
+                borderWidth: 0.5,
+                borderColor: "black",
+                hoverBorderColor: ["red","green"],
+                pointBorderWidth: 4,
+                pointBorderColor: "black",
+                // tension: 0.5,
+              },
+            ],
+          }}
+          height={800}
+          width={840}
+          options={{
+            maintainAspectRatio: true,
+          }}
+        /> */}
+        <div className=" m-auto flex">
+          <AddNewExpenses/>
+        </div>
       </div>
     </>
   );

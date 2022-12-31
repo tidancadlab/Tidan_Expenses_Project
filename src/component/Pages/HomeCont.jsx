@@ -1,59 +1,96 @@
 import { useEffect } from "react";
 import { useState } from "react";
+import { BsArrowRight } from "react-icons/bs";
+import svg1 from "../../Images/fileSearching.svg";
+import svg2 from "../../Images/graphProjectionsSvg.svg";
+import svg3 from "../../Images/liveApproval.svg";
+import svg4 from "../../Images/online_stats_SVG.svg";
 
-const HomeFirst = ({}) => {
-  const [nextBtn, setNextBtn] = useState(1);
-  const [prvBtn, setPrvBtn] = useState(1);
+const SVGArray = [svg1, svg2, svg3, svg4];
+const svgData = [
+  {
+    img: svg1,
+    Descriptions: "Find you Transactions",
+    style: "text-red-500 border-red-700 bg-white",
+  },
+  {
+    img: svg2,
+    Descriptions: "Give you that how much you spend",
+    style: "text-blue-500 border-blue-700 bg-white",
+  },
+  {
+    img: svg3,
+    Descriptions: "Track your Approval",
+    style: "text-black border-black bg-white",
+  },
+  {
+    img: svg4,
+    Descriptions: "Status of Project Cost",
+    style: "text-white bg-black",
+  },
+];
 
-  const [crpto, setCrpto] = useState([]);
-  fetch("https://techcrunch.com/wp-json/wp/v2/posts?per_page=100&context=embed")
-    .then((response) => response.json())
-    .then((data) => setCrpto(data))
-    .catch((error) => console.log("error", error));
-  console.log(crpto);
+const HomeFirst = ({ titleName, loggedUser }, props) => {
+  titleName.innerHTML = "Home";
+  const [svgChange, setSvgChange] = useState(0);
 
-  const nxtBtn = () => {
-    setNextBtn((nextBtn) => (nextBtn > 80 ? 1 : nextBtn + 1));
-  };
-  const prv_Btn = () => {
-    setNextBtn((nextBtn) => (nextBtn > 80 ? 80 : nextBtn - 1));
-  };
+  const changeTime = setInterval(() => {
+    setSvgChange(svgChange < SVGArray.length - 1 ? svgChange + 1 : 0);
+    clearInterval(changeTime);
+  }, 5000);
 
   return (
     <>
-      <div className="min-h-[calc(100vh-64px)] bg-gray-300 dark:bg-gray-600 dark:text-white">
+      <div className="min-h-[calc(100vh-64px)] bg-css overflow-x-hidden dark:bg-none dark:bg-[#025159] dark:text-white">
         <div className="">
-          <div className=" relative h-full upto-lab-s:px-10 scrn-mob:py-5 rounded px-40 py-20">
-            {crpto.map((img, indx) => {
-              return (
-                <div
-                  key={indx}
-                  className={
-                    nextBtn === indx
-                      ? `ease-in-out duration-[1000ms] block`
-                      : `${"opacity-0"} block rounded-3xl `
-                  }
-                >
-                  {indx === nextBtn && (
-                    <>
-                      <img
-                        className="rounded-3xl m-auto h-[700px]"
-                        src={img.jetpack_featured_media_url}
-                        alt="img"
-                      />
-                      <div className="hover:text-blue-600 "><a href={img.canonical_url}>{img.canonical_url}</a></div>
-                    </>
-                  )}
-                </div>
-              );
-            })}
-            <div>
-              <button onClick={nxtBtn} className="absolute top-1/2 right-2">
-                <code>nxt</code>
+          <div className="relative h-full upto-lab-s:px-10 scrn-mob:py-5 rounded px-44 py-20">
+            <div className="text-left">
+              <div className="bg-[#FCE742] dark:bg-[#ffffff] -ml-5 w-fit rounded-xl border-4 border-black shad-2">
+                <p className="text-3xl text-left bg-clip-text font-Orbitron text-transparent bg-gradient-to-r from-[#025159] to-[#3E848C] py-3 px-5 font-bold ">
+                  Is complicated to trace your Project and personal Expenses ?
+                </p>
+              </div>
+              <h1 className="text-7xl w-72 mb-10 text-left font-bold text-[#4EFCB1] dark:text-[#6662f6] border-l-8 border-[#4EFCB1] dark:border-[#6662f6] pl-5 pb-5 -ml-5 mt-5">
+                Don't{" "}
+                <span className="bg-[#4EFCB1] dark:bg-[#6662f6] text-[#FC8874] dark:text-white rounded-xl pb-1 px-2">
+                  worry,
+                </span>{" "}
+                We are here for{" "}
+                <span className="bg-[#4EFCB1] dark:bg-[#6662f6] text-[#FC8874] dark:text-white rounded-xl pb-3 px-2">
+                  you...
+                </span>
+              </h1>
+              <button className="w-60 relative flex justify-center gap-1 items-center text-xl border border-transparent hover:border-[#4EFCB1] text-[#FC8874] hover:text-[#4EFCB1] py-4 rounded-full bg-[#4EFCB1] dark:bg-[#6662f6] hover:bg-transparent ease-in-out duration-300">
+                <span>Click here</span>{" "}
+                <span className="arrowMove">
+                  <BsArrowRight />
+                </span>
               </button>
-              <button onClick={prv_Btn} className="absolute top-1/2 left-2">
-                prv
-              </button>
+            </div>
+            <div className="h-3/4 rounded-lg absolute top-44 right-24">
+              {svgData.map((img, idx) => {
+                return (
+                  <div key={idx} className="relative w-[800px]">
+                    <div
+                      className={`${
+                        idx === svgChange
+                          ? "translate-x-0 opacity-100"
+                          : "translate-x-96 opacity-0"
+                      } ease-out duration-1000`}
+                      
+                    >
+                      {idx === svgChange && (
+                        <>
+                          <img src={svgData[svgChange].img} alt="" />
+                        </>
+                      )}
+                    </div>
+                    <div>
+                      
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

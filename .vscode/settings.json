@@ -1,6 +1,14 @@
 {
     "cSpell.words": [
         "chartjs",
-        "scrn"
-    ]
+        "Praveen",
+        "scrn",
+        "Twotone"
+    ],
+    "editor.fontFamily": "Operator Mono Light, Cascadia Mono PL",
+    "editor.fontWeight": "100",
+    "terminal.integrated.fontFamily":"Operator Mono Light, Cascadia Mono PL",
+    // "terminal.integrated.fontWeight":"100",
+    "terminal.integrated.fontWeightBold":"100",
+
 }

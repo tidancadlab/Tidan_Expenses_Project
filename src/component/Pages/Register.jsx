@@ -1,25 +1,22 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { BiUserPlus } from "react-icons/bi";
-import { BsGoogle, BsCheck2 } from "react-icons/bs";
+import { Link } from "react-router-dom";
+import { BsCheck2 } from "react-icons/bs";
 import { MdOutlineDangerous } from "react-icons/md";
+import tableBGImg from "../../Images/tree.svg";
+import carBGImg from "../../Images/lady.svg";
 
 function Register(props) {
-  const [userFocus, setUserFocus] = useState(false);
-  const [emailFocus, setEmailFocus] = useState(false);
-  const [passwordFocus, setPasswordFocus] = useState(false);
-  const [confPasswordFocus, setConfPasswordFocus] = useState(false);
-  const [userNameInput, setUserNameInput] = useState("");
-  const [emailInput, setEmailInput] = useState("");
-  const [passwordInput, setPasswordInput] = useState("");
-  const [confPasswordInput, setConfPasswordInput] = useState("");
+  props.titleName.innerHTML = "Register";
+  const [userNameInput, setUserNameInput] = useState();
+  const [emailInput, setEmailInput] = useState();
+  const [passwordInput, setPasswordInput] = useState();
+  const [confPasswordInput, setConfPasswordInput] = useState();
   const [regWarn, setRegWarn] = useState("");
-  const setLoginBtn = props.setLoginBtn;
   const passMatch = confPasswordInput === passwordInput;
 
   const userRegister = async (e) => {
     e.preventDefault();
-    fetch("http://localhost:8000", {
+    fetch("https://tidan-e-app.onrender.com/", {
       method: "POST",
       crossDomain: true,
       headers: {
@@ -32,227 +29,202 @@ function Register(props) {
         userEmail: emailInput,
         password: passwordInput,
       }),
-      
     })
-      .then((res) => {
-        console.log(res.status);
-        if (res.status === 200) {
-          setRegWarn("Successfully Registered");
-        } else {
-          setRegWarn("Not Register, something Went Wrong");
-        }
+      .then((res) => res.json())
+      .then((data) => {
+        setRegWarn(data.err);
       });
   };
 
   return (
     <>
-      <div className="min-w-[400px] max-w-md w-full rounded-xl text-white dark:text-black p-2 dark:bg-white bg-gray-800">
-        <div className="px-5">
-          <h1 className="text-3xl mb-10 font-BalooBhaijaan2 font-extrabold">
-            Welcome
-          </h1>
-          <h2
-            className={`${
-              regWarn === "Successfully Registered"
-                ? "text-green-600"
-                : "text-red-600"
-            } absolute top-14`}
-          >
-            {regWarn}
-          </h2>
-          <h1 className="text-left flex flex-row items-center gap-1">
-            <BiUserPlus className="h-6 w-6" /> Register and Track your Expenses
-          </h1>
-        </div>
-        <form
-          method="POST"
-          className="flex flex-wrap relative rounded gap-8 w-full p-5"
-        >
-          <div className="relative w-full">
-            <input
-              value={userNameInput || ""}
-              onChange={(e) => {
-                setUserNameInput(e.target.value);
-              }}
-              onFocus={() => {
-                setUserFocus(true);
-              }}
-              onBlur={() => {
-                setUserFocus(false);
-              }}
-              className="bg-gray-800 h-10 px-2 w-full outline-none rounded border bg-red-30 dark:bg-white dark:border-black border-white dark:focus:border-green-500 focus:border-yellow-400 ease-in-out duration-300"
-              type="text"
-              name=""
-              id="userName"
-              autoComplete="off"
-              required
-            />
-            <label
-              htmlFor="userName"
-              className={` ${
-                userFocus
-                  ? "-translate-y-4 bg-gray-800 dark:bg-white px-2"
-                  : "opacity-50 translate-y-2"
-              } ${
-                userNameInput
-                  ? "-translate-y-[16px] opacity-100 px-2 bg-gray-800 dark:bg-white"
-                  : ""
-              } select-none ease-in-out duration-100 absolute left-3`}
-            >
-              Full Name <span className="text-red-400">*</span>
-            </label>
+      <div className="h-[calc(100vh-64px)] min-h-[800px] w-screen relative flex justify-center bg-gray-400 dark:bg-gray-600 overflow-hidden">
+        <div className="relative flex justify-center items-center w-[1200px] h-full">
+          <div className="absolute top-32">
+            <img className="h-[800px]" src={tableBGImg} alt="" />
           </div>
-          <div className="relative w-full">
-            <input
-              value={emailInput || ""}
-              onChange={(e) => {
-                setEmailInput(e.target.value);
-              }}
-              onFocus={() => {
-                setEmailFocus(true);
-              }}
-              onBlur={() => {
-                setEmailFocus(false);
-              }}
-              className="bg-gray-800 h-10 px-2 w-full outline-none rounded border bg-red-30 focus:border-yellow-500 dark:bg-white dark:border-black border-white"
-              type="email"
-              name=""
-              id="regEmail"
-              autoComplete="off"
-              required
-            />
-            <label
-              htmlFor="regEmail"
-              className={` ${
-                emailFocus
-                  ? "-translate-y-4 bg-gray-800 dark:bg-white px-2 "
-                  : "opacity-50 translate-y-2"
-              } ${
-                emailInput
-                  ? "-translate-y-[16px] opacity-100 px-2 bg-gray-800 dark:bg-white"
-                  : ""
-              } select-none ease-in-out duration-100 absolute left-3`}
+          <div className="min-w-[300px] flex flex-col items-center max-w-sm w-full rounded-3xl p-2 bg-[#AACBFF] bg-opacity-50 backdrop-blur-md py-20 z-10">
+            <div className="lightLogo w-48 -mt-10 mb-10"></div>
+            <p>{regWarn}</p>
+            <form
+              method="POST"
+              className="flex flex-wrap relative rounded-xl gap-4 text-sm w-full p-14"
             >
-              Email <span className="text-red-400">*</span>
-            </label>
+              <div className="relative w-full">
+                <input
+                  value={userNameInput || ""}
+                  onChange={(e) => {
+                    setUserNameInput(e.target.value);
+                  }}
+                  className="h-10 px-4 w-full outline-none rounded-full"
+                  type="text"
+                  name=""
+                  id="fullName"
+                  placeholder="Murari Lal Jangir"
+                  autoComplete="off"
+                  required
+                />
+                <label
+                  htmlFor="fullName"
+                  className={`absolute top-2 right-2 px-2`}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-4 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+                    />
+                  </svg>
+                </label>
+              </div>
+              <div className="relative w-full">
+                <input
+                  value={emailInput || ""}
+                  onChange={(e) => {
+                    setEmailInput(e.target.value);
+                  }}
+                  className="h-10 px-4 w-full outline-none rounded-full"
+                  type="email"
+                  name=""
+                  id="regEmail"
+                  placeholder="name@mail.com"
+                  autoComplete="off"
+                  required
+                />
+                <label
+                  htmlFor="regEmail"
+                  className={`absolute top-2 right-2 px-2`}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-4 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      d="M16.5 12a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 10-2.636 6.364M16.5 12V8.25"
+                    />
+                  </svg>
+                </label>
+              </div>
+              <div className="relative w-full">
+                <input
+                  value={passwordInput || ""}
+                  onChange={(e) => {
+                    setPasswordInput(e.target.value);
+                  }}
+                  className="h-10 px-4 w-full outline-none rounded-full"
+                  type="password"
+                  name=""
+                  id="regPassword"
+                  placeholder="Password*"
+                  autoComplete="off"
+                  required
+                />
+                <label
+                  htmlFor="regPassword"
+                  className={`absolute top-2 right-2 px-2`}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-4 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"
+                    />
+                  </svg>
+                </label>
+              </div>
+              <div className="relative flex flex-col items-start w-full">
+                <input
+                  value={confPasswordInput || ""}
+                  onChange={(e) => {
+                    setConfPasswordInput(e.target.value);
+                  }}
+                  className="h-10 px-4 w-full outline-none rounded-full"
+                  type="password"
+                  name=""
+                  id="confPassword"
+                  placeholder="Conform Password*"
+                  autoComplete="off"
+                  required
+                />
+                <label
+                  htmlFor="confPassword"
+                  className={`absolute top-2 right-2 px-2`}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-4 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"
+                    />
+                  </svg>
+                </label>
+                {confPasswordInput && passwordInput ? (
+                  <span className="absolute top-3 right-10">
+                    {passMatch ? (
+                      <BsCheck2 className="fill-green-600" />
+                    ) : (
+                      <MdOutlineDangerous className="fill-red-500" />
+                    )}
+                  </span>
+                ) : null}
+                {confPasswordInput && passwordInput ? (
+                  <span
+                    className={` ${
+                      passMatch
+                        ? "text-green-500 after:content-['Matched']"
+                        : "text-red-500 after:content-['Not_Matched']"
+                    } absolute -bottom-4 text-xs`}
+                  >
+                    Password{" "}
+                  </span>
+                ) : null}
+              </div>
+              <div className="w-full">
+                <button
+                  className="w-full my-1 p-2 bg-blue-500 rounded-full"
+                  type="submit"
+                  onClick={userRegister}
+                >
+                  Register
+                </button>
+              </div>
+            </form>
+            <div className="flex flex-wrap relative rounded gap-1 w-full p-5">
+              <span>Have you account ? please</span>
+              <Link to="/Login" className="text-blue-500" type="submit">
+                login...
+              </Link>
+            </div>
           </div>
-          <div className="relative w-full">
-            <input
-              value={passwordInput || ""}
-              onChange={(e) => {
-                setPasswordInput(e.target.value);
-              }}
-              onFocus={() => {
-                setPasswordFocus(true);
-              }}
-              onBlur={() => {
-                setPasswordFocus(false);
-              }}
-              className="bg-gray-800 h-10 px-2 w-full outline-none rounded border bg-red-30 dark:bg-white dark:border-black border-white"
-              type="password"
-              name=""
-              id="regPassword"
-              autoComplete="off"
-              required
-            />
-            <label
-              htmlFor="regPassword"
-              className={` ${
-                passwordFocus
-                  ? "-translate-y-4 bg-gray-800 dark:bg-white px-2 "
-                  : "opacity-50 translate-y-2"
-              } ${
-                passwordInput
-                  ? "-translate-y-[16px] opacity-100 px-2 bg-gray-800 dark:bg-white"
-                  : ""
-              } select-none ease-in-out duration-100 absolute left-3`}
-            >
-              Password <span className="text-red-400">*</span>
-            </label>
+          <div className="absolute z-10 right-40 top-96 pointer-events-none">
+            <img className="h-[500px]" src={carBGImg} alt="" />
           </div>
-          <div className="relative flex flex-col items-start w-full">
-            <input
-              value={confPasswordInput || ""}
-              onChange={(e) => {
-                setConfPasswordInput(e.target.value);
-              }}
-              onFocus={() => {
-                setConfPasswordFocus(true);
-              }}
-              onBlur={() => {
-                setConfPasswordFocus(false);
-              }}
-              className="bg-gray-800 h-10 px-2 w-full outline-none rounded border bg-red-30 dark:bg-white dark:border-black border-white"
-              type="password"
-              name=""
-              id="confPassword"
-              autoComplete="off"
-              required
-            />
-            <label
-              className={` ${
-                confPasswordFocus
-                  ? "-translate-y-4 bg-gray-800 dark:bg-white px-2 "
-                  : "opacity-50 translate-y-2"
-              } ${
-                confPasswordInput
-                  ? "-translate-y-[16px] opacity-100 px-2 bg-gray-800 dark:bg-white"
-                  : ""
-              } select-none ease-in-out duration-100 absolute left-3`}
-            >
-              Conform Password <span className="text-red-400">*</span>
-            </label>
-            {confPasswordInput && passwordInput ? (
-              <span className="absolute top-3 right-2">
-                {passMatch ? (
-                  <BsCheck2 className="fill-green-600" />
-                ) : (
-                  <MdOutlineDangerous className="fill-red-500" />
-                )}
-              </span>
-            ) : null}
-            {confPasswordInput && passwordInput ? (
-              <span
-                className={` ${
-                  passMatch
-                    ? "text-green-500 after:content-['Matched']"
-                    : "text-red-500 after:content-['Not_Matched']"
-                } absolute -bottom-4 text-xs`}
-              >
-                Password{" "}
-              </span>
-            ) : null}
-          </div>
-          <div className="w-full flex -mt-3 flex-col items-start">
-            <button
-              className="border border-violet-800 w-full my-1 p-2 bg-violet-400 text-violet-800 rounded-md hover:bg-transparent hover:shadow-md hover:shadow-violet-800"
-              type="submit"
-              onClick={userRegister}
-            >
-              Register
-            </button>
-          </div>
-        </form>
-        <div className="flex -mt-7 flex-wrap relative rounded gap-5 w-full p-5">
-          <button
-            className="flex gap-2 justify-center items-center border w-full my-1 p-2 bg-blue-400 border-blue-800 text-blue-800 rounded-md"
-            type="submit"
-          >
-            <BsGoogle className="" />
-            Continue with Google
-          </button>
-        </div>
-        <h1>------ OR -------</h1>
-        <div className="flex flex-wrap relative rounded gap-5 w-full p-5">
-          <button
-            onClick={() => {
-              setLoginBtn((loginBtn) => (loginBtn ? false : true));
-            }}
-            className="border w-full my-1 p-2 bg-zinc-400 border-zinc-800 text-zinc-800 rounded-md"
-            type="submit"
-          >
-            Login
-          </button>
         </div>
       </div>
     </>

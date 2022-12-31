@@ -1,24 +1,28 @@
 import { useState } from "react";
+import { Navigate, useParams } from "react-router-dom";
 import AppSearchBar from "./AppSearchBar";
 import SideBar from "./SideBar";
 
-function AppExpenses(props) {
+function AppExpenses({ CustomLink, darkMode, setDarkMode, loggedUser, data }) {
   const [sideBarExtendBtn, setSideBarExtendBtn] = useState(false);
 
   return (
     <>
       <div>
         <AppSearchBar
-          CustomLink={props.CustomLink}
-          darkMode={props.darkMode}
+          darkMode={darkMode}
           setSideBarExtendBtn={setSideBarExtendBtn}
           sideBarExtendBtn={sideBarExtendBtn}
-          setDarkMode={props.setDarkMode}
+          setDarkMode={setDarkMode}
+          loggedUser={loggedUser}
         />
         <SideBar
-          data={props.data}
-          CustomLink={props.CustomLink}
+          data={data}
+          CustomLink={CustomLink}
           sideBarExtendBtn={sideBarExtendBtn}
+          loggedUser={loggedUser}
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
         />
       </div>
     </>

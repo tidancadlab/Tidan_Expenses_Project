@@ -1,92 +1,308 @@
-import {
-  BsCaretDownFill,
-  BsFillEyeFill,
-  BsFillPencilFill,
-} from "react-icons/bs";
-import { AiTwotoneDelete } from "react-icons/ai";
+import { BsCaretDownFill, BsSearch, BsShop, BsX } from "react-icons/bs";
 import moment from "moment/moment";
 import { useEffect, useState } from "react";
+import ExpView from "./contenet/ExpView";
+import notFound from "../../../Images/notFound.svg";
+import ApproveExpenses from "./contenet/ApproveExpenses";
+import { createSearchParams, useSearchParams } from "react-router-dom";
+
+localStorage.setItem("notFoudImg", notFound);
+const notFoundImg = localStorage.getItem("notFoundImg");
 
 function Approval(props) {
+  //<-----Variables------>
+  const { titleName, loggedUser } = props;
+  titleName.innerHTML = "Approval-Tidan Expenses";
   const [tran, setTran] = useState([]);
+  let [currentPageNumber, setCurrentPageNumber] = useState(0);
+  const [pageRefresh, setPageRefresh] = useState(true);
+  const [userPtyData, setUserPtyData] = useState({});
 
+  //<------Fetch API----->
   useEffect(() => {
     fetch("/addExpenses")
       .then((response) => response.json())
       .then((data) => setTran(data));
-  }, [tran]);
+  }, [pageRefresh]);
 
+  useEffect(() => {
+    if (loggedUser.userId !== undefined) {
+      const { userId } = loggedUser;
+      fetch("/userDataProperty", {
+        method: "POST",
+        crossDomain: true,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify({ userId }),
+      })
+        .then((res) => res.json())
+        .then((data) => setUserPtyData(data));
+    } else {
+    }
+  }, [loggedUser]); 
+  //<----Search Quarry --->
+  const [searchInput, setSearchInput] = useState("");
+  const [searchFilterResult, setSearchFilterResult] = useState([]);
+  async function searchTrans() {
+    const searchFilter = await tran.filter(
+      (value) =>
+        value.expItem.toLowerCase().includes(searchInput.toLowerCase()) ||
+        value.expVendor.toLowerCase().includes(searchInput.toLowerCase())
+    );
+    setSearchFilterResult(await searchFilter);
+  }
+
+  /// <-------Array Filter by user------->
+  const filteredTranArray = tran.filter(function (id) {
+    return id.userLevel < loggedUser.userProperty.userLevel;
+  });
+
+  ///<-----------Array Search ------>
+  const [searchParams, SetSearchParams] = useSearchParams("");
+  const dataUrl = searchParams.get("tran");
+  let searchData = filteredTranArray.filter(function (v) {
+    return v.expItem.startsWith(dataUrl ? dataUrl.toLocaleLowerCase() : "");
+  });
+
+
+  // <----- Pages ------->
+
+  let dataArray =
+    searchFilterResult.length <= 0 ? searchData : searchFilterResult;
+  const transactionPerPage = 14;
+  let visitedPages = transactionPerPage * currentPageNumber;
+  let pageNumber = [];
+
+  for (
+    let index = 1;
+    index <= Math.ceil(searchData.length / transactionPerPage);
+    index++
+  ) {
+    pageNumber.push(index);
+  }
+  let totalPages = [];
+  for (let index = 0; index < dataArray.length / transactionPerPage; index++) {
+    totalPages.push(index + 1);
+  }
+
+  const limitedTrans = dataArray.slice(
+    visitedPages,
+    visitedPages + transactionPerPage
+  );
+
+  const [idxSelectedItem, setIdxSelectedItem] = useState(0);
+  const [viewDetailedExp, setViewDetailedExp] = useState(false);
+
+  const viewTrans = (item) => {
+    setIdxSelectedItem(item);
+    setViewDetailedExp(true);
+  };
+
+  function nextExp() {
+    setIdxSelectedItem((idxSelectedItem) =>
+      idxSelectedItem < limitedTrans.length - 1
+        ? idxSelectedItem + 1
+        : limitedTrans.length - 1
+    );
+  }
+
+  function previExp() {
+    setIdxSelectedItem((idxSelectedItem) =>
+      idxSelectedItem > 0 ? idxSelectedItem - 1 : 0
+    );
+  }
+  const selectedExpenses = limitedTrans[idxSelectedItem] || 0;
+ //<----------Dark Background----------->
+
+ const darkMode = localStorage.getItem("DarkMode");
+
+  
   return (
     <>
-      <div className="min-h-[calc(100vh-56px)] h-full w-screen bg-gray-300 dark:bg-gray-900">
-        <div className="flex justify-center">
-          <div className="container p-2 border-black dark:border-white rounded-3xl">
-            <div className="p-3 dark:text-white"></div>
-            <div className="dataDiv rounded-b-3xl dark:text-white">
-              <ul className="flex justify-between p-4 rounded items-center bg-violet-600">
-                <li className="cursor-pointer w-[200px]">
-                  Bill Date <BsCaretDownFill />
-                </li>
-                <li className="w-[300px]">Item</li>
-                <li className="w-20">Amount</li>
-                <li className="w-36">Attachment</li>
-                <li className="w-36">Uploaded By</li>
-                <li className="w-64">Remark</li>
-                <li className="w-28">Action</li>
-              </ul>
-              {tran.map((item, idx) => {
-                return (
-                  <ul
-                    key={idx}
-                    className="flex px-4 justify-between items-center my-2 rounded dark:bg-opacity-10 bg-opacity-50 text-rose-500 dark:border-white dark:border-opacity-20 dark:text-white border border-rose-500 bg-rose-200 dark:bg-white py-1"
+      {tran.length > 0 ? (
+        <div className={`${darkMode === "dark"? "bg-img":"bg-img3"} min-h-screen h-full pt-16`}>
+          <div className="flex justify-center">
+            <div className="container p-2 border-black dark:border-white rounded-3xl">
+              <div className="flex justify-between p-3 dark:text-white">
+                <div>
+                  <p className="text-3xl font-Kalam">Approval Sheet</p>
+                </div>
+                <div className="relative flex items-center h-10 rounded-full border border-dashed border-[#FC8874] dark:bg-slate-800">
+                  <input
+                    className="outline-none pl-5 pr-8 py-1 rounded-l-full bg-transparent font-Kalam"
+                    type="text"
+                    list="searchData"
+                    value={dataUrl}
+                    placeholder="Search"
+                    onChange={(e) => {
+                      SetSearchParams(
+                        createSearchParams({ tran: e.target.value })
+                      );
+                    }}
+                  />
+                  <datalist id="searchData">
+                    {filteredTranArray.map(v=><option key={v._id} value={v.expItem}>{v.expItem}</option>)}
+                  </datalist>
+                  <div className="h-full border-slate-900 border-l border-dashed w-0.5"></div>
+                  <div
+                  disabled={dataUrl === ""}
+                    onClick={(e) => {
+                      SetSearchParams(
+                        createSearchParams({ tran: "" })
+                      );
+                    }}
+                    className={`${dataUrl === ""? "opacity-0" : ""} flex h-full justify-center items-center rounded-r-full pl-2 px-4 hover:bg-slate-700`}
                   >
-                    <li className="flex-col  w-[200px]">
-                      <span>{moment(item.expDate).format("DD-MM-Y")}</span>
-                      <span className="text-[10px]">{item._id}</span>
+                    <BsX />
+                  </div>
+                </div>
+              </div>
+              {/* Data for Approval*/}
+              {true ? (
+                <div className="dataDiv rounded px-2 py-2 dark:text-white bg-[#FC8874] dark:bg-[#212121]">
+                  <ul className="flex justify-around rounded-t py-2 items-center bg-[#FCE742] text-black divide-x divide-dashed divide-[#FC8874] dark:divide-white border-b border-dashed border-white dark:border-white">
+                    <li className="cursor-pointer w-[150px]  font-Kalam">
+                      Bill Date <BsCaretDownFill />
                     </li>
-                    <li className="flex-col upto-lab-s:hidden w-[300px]">
-                      <span className="upto-lab-s:hidden">{item.expItem}</span>
-                      <span className="text-xs upto-lab-s:hidden">
-                        from {item.expVendor}
-                      </span>
-                    </li>
-                    <li className="w-20">{item.expAmount}</li>
-                    <li className="w-36 text-sm">
-                      {item.billFile ? (
-                        <span className="text-blue-500 underline cursor-pointer">
-                          {item.billFile}
-                        </span>
-                      ) : (
-                        "Not Available"
-                      )}
-                    </li>
-                    <li className="flex-col w-36">
-                      <span>{item.expUploaded}</span>
-                      <span className="text-xs">
-                        {moment(item.expDate).format("DD-MM-Y hh:mm:ss A")}
-                      </span>
-                    </li>
-                    <li className="w-64">{item.expRemark}</li>
-                    <li className="rounded-md flex items-center border border-blue-600 pl-0">
-                      <button className="px-2 py-1 rounded-l hover:bg-blue-600 text-blue-900 dark:text-white active:bg-blue-300 ease-in-out duration-300">
-                        <BsFillEyeFill />
-                      </button>
-                      <span className="h-3 w-[1px] mx-[1px] bg-blue-500"></span>
-                      <button className="px-2 py-1 hover:bg-blue-600 text-blue-900 dark:text-white active:bg-blue-300 ease-in-out duration-300">
-                        <BsFillPencilFill />
-                      </button>
-                      <span className="h-3 w-[1px] mx-[1px] bg-blue-500"></span>
-                      <button className="px-2 py-1 rounded-r hover:bg-blue-600 text-blue-900 dark:text-white active:bg-blue-300 ease-in-out duration-300">
-                        <AiTwotoneDelete />
-                      </button>
-                    </li>
+                    <li className=" font-Kalam w-36">Item</li>
+                    <li className=" font-Kalam w-28">Amount</li>
+                    <li className=" font-Kalam w-24">Attachment</li>
+                    <li className=" font-Kalam w-32">Uploaded By</li>
+                    <li className=" font-Kalam w-52">Remark</li>
+                    <li className=" font-Kalam w-24 text-center">Approval</li>
+                    <li className=" font-Kalam w-52">Remark if Reject</li>
+                    <li className=" font-Kalam w-20">Action</li>
                   </ul>
-                );
-              })}
+
+                  <div>
+                    {limitedTrans.map((item, idx) => {
+                      return (
+                        <ul
+                          key={item._id}
+                          className="flex text-sm testdiv font-thin justify-around items-center divide-x divide-dashed divide-black dark:divide-white border-b border-dashed border-black dark:border-white"
+                        >
+                          <li className="flex flex-col w-[150px]">
+                            <span className=" font-Kalam">
+                              {moment(item.expDate).format("DD-MMM-YY")}
+                            </span>
+                            <a
+                              href={void 0}
+                              onClick={() => viewTrans(idx)}
+                              className="text-[10px] visited:text-red-500 cursor-pointer hover:underline text-sky-500 hover:text-blue-500"
+                            >
+                              {item._id}
+                            </a>
+                          </li>
+                          <li className="flex flex-col gap-1 capitalize w-36">
+                            <span className="truncate text-sm font-normal  font-Kalam">
+                              {item.expItem}
+                            </span>
+                            <span className="text-xs flex gap-2 items-baseline text-orange-500">
+                              <span className="text-[10px]">
+                                <BsShop />
+                              </span>{" "}
+                              <span className="truncate">{item.expVendor}</span>
+                            </span>
+                          </li>
+                          <li className="w-28 font-Kalam">
+                            {(item.expAmount)}
+                          </li>
+                          <li className="w-24 text-sm">
+                            <span className="text-blue-500 underline cursor-pointer">
+                              {item.billFile || (
+                                <span className="cursor-auto text-white no-underline">
+                                  N/A
+                                </span>
+                              )}
+                            </span>
+                          </li>
+                          <li className="flex flex-col w-32 capitalize">
+                            <span className=" font-Kalam">
+                              {item.expUploaded}
+                            </span>
+                            <span className="text-xs text-teal-500  font-Kalam">
+                              {moment(item.expUploadedOnTime).format(
+                                "DD-MM-YY hh:mm A"
+                              )}
+                            </span>
+                          </li>
+                          <li
+                            title={item.expRemark}
+                            className="w-52 font-Kalam capitalize"
+                          >
+                            {item.expRemark || "---"}
+                          </li>
+                          <ApproveExpenses
+                            setPageRefresh={setPageRefresh}
+                            pageRefresh={pageRefresh}
+                            item={item}
+                            // waitingBtnAnimation = {waitingBtnAnimation}
+                            // setWaitingBtnAnimation = {setWaitingBtnAnimation}
+                          />
+                        </ul>
+                      );
+                    })}
+                  </div>
+
+                  {pageNumber.length > 1 && (
+                    <div className="flex gap-5 justify-end bg-white text-black px-5 rounded-b-lg">
+                      <button
+                        disabled={currentPageNumber === 0}
+                        hidden={currentPageNumber === 0}
+                        onClick={() =>
+                          setCurrentPageNumber(
+                            currentPageNumber <= 0 ? 0 : currentPageNumber - 1
+                          )
+                        }
+                      >
+                        Previous
+                      </button>
+                      <div className="flex">
+                        {pageNumber.length === 1 ? "Page" : "Pages"}{" "}
+                        {pageNumber[currentPageNumber] || 1} of{" "}
+                        {pageNumber.length}
+                      </div>
+                      <button
+                        disabled={currentPageNumber === totalPages.length - 1}
+                        hidden={currentPageNumber === totalPages.length - 1}
+                        onClick={() =>
+                          setCurrentPageNumber(
+                            currentPageNumber < totalPages.length - 1
+                              ? currentPageNumber + 1
+                              : totalPages.length - 1
+                          )
+                        }
+                      >
+                        Next
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : null}
             </div>
+            {viewDetailedExp && (
+              <ExpView
+                selectedExpenses={selectedExpenses}
+                setViewDetailedExp={setViewDetailedExp}
+                nextExp={nextExp}
+                previExp={previExp}
+                limitedTran={limitedTrans}
+                idxSelectedItem={idxSelectedItem}
+                setIdxSelectedItem={setIdxSelectedItem}
+                crPageNum={currentPageNumber}
+                titleName={titleName}
+              />
+            )}
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="flex text-7xl justify-center pt-20 text-black">
+          Waiting....
+        </div>
+      )}
     </>
   );
 }

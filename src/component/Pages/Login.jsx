@@ -1,146 +1,170 @@
 import { useState } from "react";
-import { BsFillShieldLockFill, BsGoogle } from "react-icons/bs";
-import Register from "./Register";
+import { BsKey } from "react-icons/bs";
+import { CiUser } from "react-icons/ci";
+import { FaUser } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import ProgressRound from "./ExpApp/contenet/PropgressRound";
+// import Register from "./Register";
 
-function LoginPage() {
-  const [emailFocus, setEmailFocus] = useState(false);
-  const [passwordFocus, setPasswordFocus] = useState(false);
-  const [loginBtn, setLoginBtn] = useState(true);
-  const [emailInput, setEmailInput] = useState();
-  const [passwordInput, setPasswordInput] = useState();
+import loginImg from "../../Images/loginImg.jpg";
+import WaitingRoundAnimation from "./ExpApp/contenet/WaitningRoundAnimation";
 
+function LoginPage({ titleName, loggedUser }, props) {
+  titleName.innerHTML = "Login";
+  let [userData, setUserData] = useState({});
+  const [emailInput, setEmailInput] = useState("");
+  const [passwordInput, setPasswordInput] = useState("");
+  const [isLogged, setIsLogged] = useState(false);
+  let btnName = "Login";
+  const [errUser, setErrUser] = useState({
+    msg: "",
+    className: "",
+    err: false,
+  });
+  const loginUser = async (e) => {
+    e.preventDefault();
+    btnName = await (<WaitingRoundAnimation />);
+    await fetch("https://tidan-e-app.onrender.com/login", {
+      method: "POST",
+      crossDomain: true,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({ userEmail: emailInput, password: passwordInput }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === "ok") {
+          setUserData(data);
+          window.localStorage.removeItem("token");
+          window.localStorage.setItem("token", data.data);
+          window.location = "/";
+          setIsLogged(true);
+          setErrUser({
+            msg: "Successfully Logged in!",
+            className: "text-green-500",
+            err: false,
+          });
+        } else {
+          btnName = "not working";
+          setErrUser({
+            msg: "Email & Password not matched!",
+            className: "text-red-500",
+            err: true,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err, "user Not found");
+      });
+  };
+  window.localStorage.setItem("userData", JSON.stringify(userData));
+  console.log(btnName);
   return (
     <>
-      <div className="h-[calc(100vh-80px)] min-h-[800px] w-screen relative bg-gray-400 dark:bg-gray-600">
-        <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
-          {loginBtn ? (
-            <div className="min-w-[400px] max-w-md w-full rounded-xl text-white dark:text-black p-2 dark:bg-white bg-gray-800 ease-in-out duration-200">
-              <div className="px-5">
-                <h1 className="text-3xl mb-10 font-BalooBhaijaan2 font-extrabold">
-                  Welcome
+      {isLogged ? (
+        <ProgressRound />
+      ) : (
+        <div className="h-[calc(100vh-64px)] min-h-[800px] w-screen relative bg-white dark:bg-gray-600">
+          <div className="flex">
+            <div className="flex justify-center items-center min-w-max w-full text-white dark:text-black p-10">
+              <div className="relative flex flex-col justify-center items-center bg-[#AACBFF] max-w-sm w-full h-fit px-14 py-24 shadow-xl rounded-3xl gap-4">
+                <div className="lightLogo w-52 -mt-10 mb-10"></div>
+                <h1 className={`absolute top-3 ${errUser.className}`}>
+                  {errUser.msg}
                 </h1>
-                <h1 className="text-left flex flex-row items-center gap-1">
-                  <BsFillShieldLockFill className="h-5 w-5" /> Login to Continue
-                  access Expenses
-                </h1>
-              </div>
-              <form
-                method="GET"
-                className="flex flex-wrap relative rounded gap-8 w-full p-5"
-              >
-                <div className="relative w-full">
-                  <input
-                    value={emailInput || ""}
-                    onChange={(e) => {
-                      setEmailInput(e.target.value);
-                    }}
-                    onFocus={() => {
-                      setEmailFocus(true);
-                    }}
-                    onBlur={() => {
-                      setEmailFocus(false);
-                    }}
-                    className="bg-gray-800 h-10 px-2 w-full outline-none rounded border bg-red-30 dark:bg-white dark:border-black border-white"
-                    type="email"
-                    name="email"
-                    id="email"
-                    autoComplete="off"
-                    required
-                  />
-                  <label
-                    htmlFor="email"
-                    className={` ${
-                      emailFocus
-                        ? "-translate-y-4 bg-gray-800 dark:bg-white px-2 "
-                        : "translate-y-2"
-                    } ${
-                      emailInput
-                        ? "-translate-y-[16px] px-2 bg-gray-800 dark:bg-white"
-                        : ""
-                    } select-none ease-in-out duration-100 absolute left-3`}
-                  >
-                    Email
-                  </label>
+                <div className="">
+                  <div className="flex justify-center items-center h-20 w-20 rounded-full bg-blue-100">
+                    <FaUser className="text-7xl rounded-full fill-blue-500" />
+                  </div>
                 </div>
-                <div className="relative w-full">
-                  <input
-                    value={passwordInput || ""}
-                    onChange={(e) => {
-                      setPasswordInput(e.target.value);
-                    }}
-                    onFocus={() => {
-                      setPasswordFocus(true);
-                    }}
-                    onBlur={() => {
-                      setPasswordFocus(false);
-                    }}
-                    className="bg-gray-800 h-10 px-2 w-full outline-none rounded border bg-red-30 dark:bg-white dark:border-black border-white"
-                    type="password"
-                    name=""
-                    id="password"
-                    autoComplete="off"
-                    required
-                  />
-                  <label
-                    htmlFor="password"
-                    className={` ${
-                      passwordFocus
-                        ? "-translate-y-4 bg-gray-800 dark:bg-white px-2 "
-                        : "translate-y-2"
-                    } ${
-                      passwordInput
-                        ? "-translate-y-[16px] px-2 bg-gray-800 dark:bg-white"
-                        : ""
-                    }  select-none ease-in-out duration-100 absolute left-3`}
-                  >
-                    Password
-                  </label>
-                </div>
-                <div className="w-full flex -mt-3 flex-col items-start">
-                  <button
-                    className="border border-violet-800 w-full my-1 p-2 bg-violet-400 text-violet-800 rounded-md"
-                    type="submit"
-                  >
-                    Login
-                  </button>
-                  <a
-                    onClick={(e) => {
-                      e.preventDefault();
-                    }}
-                    className="text-blue-700 hover:underline"
-                    href="/#"
-                  >
-                    Forget password
-                  </a>
-                </div>
-              </form>
-              <div className="flex -mt-7 flex-wrap relative rounded gap-5 w-full p-5">
-                <button
-                  className="flex gap-2 justify-center items-center border w-full my-1 p-2 bg-blue-400 border-blue-800 text-blue-800 rounded-md"
-                  type="submit"
+                <form
+                  method="GET"
+                  onSubmit={loginUser}
+                  className="flex flex-col p-2 gap-4 w-full"
                 >
-                  <BsGoogle className="" />
-                  Sign in with Google
-                </button>
-              </div>
-              <h1>------ OR -------</h1>
-              <div className="flex flex-wrap relative rounded gap-5 w-full p-5">
-                <button
-                  onClick={() => {
-                    setLoginBtn((loginBtn) => (loginBtn ? false : true));
-                  }}
-                  className="border w-full my-1 p-2 bg-zinc-400 border-zinc-800 text-zinc-800 rounded-md"
-                  type="submit"
-                >
-                  Register
-                </button>
+                  <div className="flex flex-col gap-4 text-sm">
+                    <div className="relative w-full">
+                      <label className="absolute right-4 top-3" htmlFor="email">
+                        <CiUser />
+                      </label>
+                      <input
+                        value={emailInput || ""}
+                        onChange={(e) => {
+                          setEmailInput(e.target.value);
+                        }}
+                        className="bg-gray-800 h-10 px-5 w-full outline-none rounded-full dark:bg-white focus:bg-blue-900"
+                        type="email"
+                        name="email"
+                        id="email"
+                        placeholder="name@mail.com"
+                        autoComplete="off"
+                        required
+                      />
+                    </div>
+                    <div className="relative w-full">
+                      <label
+                        className="absolute right-4 top-3"
+                        htmlFor="password"
+                      >
+                        <BsKey />
+                      </label>
+                      <input
+                        value={passwordInput || ""}
+                        onChange={(e) => {
+                          setPasswordInput(e.target.value);
+                        }}
+                        className="bg-gray-800 h-10 px-5 w-full outline-none rounded-full dark:bg-white focus:bg-blue-900"
+                        type="password"
+                        name=""
+                        id="password"
+                        placeholder="*********"
+                        autoComplete="off"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="w-full flex flex-col gap-2">
+                    <div className="">
+                      <Link
+                        to="/Register"
+                        className="text-blue-500"
+                        type="submit"
+                      >
+                        Sign up now
+                      </Link>
+                    </div>
+                    <button
+                      className="w-full my-1 p-2 bg-blue-500 text-white rounded-full"
+                      type="submit"
+                    >
+                      {btnName}
+                    </button>
+                    <a
+                      onClick={(e) => {
+                        e.preventDefault();
+                      }}
+                      className="text-blue-700 hover:underline"
+                      href="/#"
+                    >
+                      Forget password
+                    </a>
+                  </div>
+                </form>
               </div>
             </div>
-          ) : (
-            <Register loginBtn={loginBtn} setLoginBtn={setLoginBtn} />
-          )}
+            <div className="min-w-fit scrn-lap-max-L:hidden">
+              <img
+                className="h-[calc(100vh-64px)] rounded-l-xl"
+                src={loginImg}
+                alt=""
+              />
+            </div>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }

@@ -1,12 +1,15 @@
-import { BrowserRouter } from 'react-router-dom';
-import './App.css';
-import HomePage from './component/Pages/Home';
+import { useEffect, useState } from "react";
+import { BrowserRouter } from "react-router-dom";
+import "./App.css";
+import HomePage from "./component/Pages/Home";
 
-function App() {
+function App({ titleName }) {
+  titleName.innerHTML = "APP";
+
   return (
     <div className="App">
       <BrowserRouter>
-        <HomePage />
+        <HomePage titleName={titleName}/>
       </BrowserRouter>
     </div>
   );
