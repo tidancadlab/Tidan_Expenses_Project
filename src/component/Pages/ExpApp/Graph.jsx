@@ -31,7 +31,8 @@ function Graph({ titleName }) {
 
   return (
     <>
-      <div className="m-auto w-screen h-screen flex justify-center bg-black">
+    <AddNewExpenses/>
+      {/* <div className="m-auto w-screen h-screen flex justify-center bg-black"> */}
         {/* <Line
           data={{
             labels: date,
@@ -54,10 +55,9 @@ function Graph({ titleName }) {
             maintainAspectRatio: true,
           }}
         /> */}
-        <div className=" m-auto flex">
-          <AddNewExpenses/>
+        {/* <div className=" m-auto flex">
         </div>
-      </div>
+      </div> */}
     </>
   );
 }

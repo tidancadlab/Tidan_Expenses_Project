@@ -16,9 +16,6 @@
   width: 48px;
   height:48px;
 }
-.darkLogo:hover{
-  content: url(../../Images/LOGO/lightLogo.svg);
-}
 
 .lightLogo {
   content: url(../../Images/LOGO/darkLogo1.svg);
@@ -31,6 +28,7 @@
 body::-webkit-scrollbar,
 div::-webkit-scrollbar {
   height: 4px;
+  width: 4px;
   position: absolute;
 }
 

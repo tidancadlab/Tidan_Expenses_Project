@@ -7,6 +7,7 @@ import {
 import { IoIosLogOut } from "react-icons/io";
 import UserProfile from "./UserProfile";
 import { Link } from "react-router-dom";
+import WaitningRoundAnimation from '././contenet/WaitningRoundAnimation';
 
 function AppSearchBar(props) {
   const { darkMode } = props;
@@ -19,7 +20,7 @@ function AppSearchBar(props) {
   useEffect(() => {
     if (loggedUser.userId !== undefined) {
       const { userId } = loggedUser;
-      fetch("/userDataProperty", {
+      fetch("https://tidan-e-app.onrender.com/userDataProperty", {
         method: "POST",
         crossDomain: true,
         headers: {
@@ -39,7 +40,7 @@ function AppSearchBar(props) {
   //<-----fetch API---->
 
   const API = async () => {
-    await fetch("/loggedUserData", {
+    await fetch("https://tidan-e-app.onrender.com/loggedUserData", {
       method: "POST",
       crossDomain: true,
       headers: {
@@ -102,9 +103,9 @@ function AppSearchBar(props) {
               className="flex w-fit items-center gap-1 cursor-pointer bg-gray-900 upto-lab-s:pr-0 pr-6 pl-px upto-lab-s:pl-0 upto-lab-s:py-0 py-px rounded-full"
             >
               <span className=" avatar1 w-7 upto-lab-s:w-8 upto-lab-s:h-8 flex justify-center items-center h-7 rounded-full m-[2px] upto-lab-s:m-0 border-black dark:border-white"></span>
-              <h1 className="upto-lab-s:hidden text-white">
+              {loggedUser.userName !== undefined ?<h1 className="upto-lab-s:hidden text-white">
                 {loggedUser.userName || "undefined"}
-              </h1>
+              </h1> : <WaitningRoundAnimation/>}
               <span className="absolute bottom-2 right-1 upto-lab-s:hidden text-white">
                 {!profileDrop ? <BsCaretDownFill /> : <BsCaretUpFill />}
               </span>

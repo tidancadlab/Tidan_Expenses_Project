@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { BsArrowRight } from "react-icons/bs";
+import { Link } from "react-router-dom";
 import svg1 from "../../Images/fileSearching.svg";
 import svg2 from "../../Images/graphProjectionsSvg.svg";
 import svg3 from "../../Images/liveApproval.svg";
@@ -34,19 +35,19 @@ const HomeFirst = ({ titleName, loggedUser }, props) => {
   titleName.innerHTML = "Home";
   const [svgChange, setSvgChange] = useState(0);
 
-  const changeTime = setInterval(() => {
-    setSvgChange(svgChange < SVGArray.length - 1 ? svgChange + 1 : 0);
-    clearInterval(changeTime);
-  }, 5000);
+  // const changeTime = setInterval(() => {
+  //   setSvgChange(svgChange < SVGArray.length - 1 ? svgChange + 1 : 0);
+  //   clearInterval(changeTime);
+  // }, 5000);
 
   return (
     <>
-      <div className="min-h-[calc(100vh-64px)] bg-css overflow-x-hidden dark:bg-none dark:bg-[#025159] dark:text-white">
+      <div className="min-h-[calc(100vh-64px)] bg-css overflow-x-hidden dark:bg-none dark:bg-[#1c2747] dark:text-white">
         <div className="">
           <div className="relative h-full upto-lab-s:px-10 scrn-mob:py-5 rounded px-44 py-20">
             <div className="text-left">
               <div className="bg-[#FCE742] dark:bg-[#ffffff] -ml-5 w-fit rounded-xl border-4 border-black shad-2">
-                <p className="text-3xl text-left bg-clip-text font-Orbitron text-transparent bg-gradient-to-r from-[#025159] to-[#3E848C] py-3 px-5 font-bold ">
+                <p className="text-xl text-left bg-clip-text font-Orbitron text-transparent bg-gradient-to-r from-[#025159] to-[#3E848C] py-3 px-5 font-bold ">
                   Is complicated to trace your Project and personal Expenses ?
                 </p>
               </div>
@@ -60,14 +61,14 @@ const HomeFirst = ({ titleName, loggedUser }, props) => {
                   you...
                 </span>
               </h1>
-              <button className="w-60 relative flex justify-center gap-1 items-center text-xl border border-transparent hover:border-[#4EFCB1] text-[#FC8874] hover:text-[#4EFCB1] py-4 rounded-full bg-[#4EFCB1] dark:bg-[#6662f6] hover:bg-transparent ease-in-out duration-300">
+              <Link to="e-app/:id" className="w-60 relative flex justify-center gap-1 items-center text-xl border border-transparent hover:border-[#4EFCB1] text-[#FC8874] hover:text-[#4EFCB1] py-4 rounded-full bg-[#4EFCB1] dark:bg-[#6662f6] hover:bg-transparent ease-in-out duration-300">
                 <span>Click here</span>{" "}
                 <span className="arrowMove">
                   <BsArrowRight />
                 </span>
-              </button>
+              </Link>
             </div>
-            <div className="h-3/4 rounded-lg absolute top-44 right-24">
+            <div className="h-3/4 rounded-lg absolute top-44 right-24 hidden scrn-4k:block">
               {svgData.map((img, idx) => {
                 return (
                   <div key={idx} className="relative w-[800px]">

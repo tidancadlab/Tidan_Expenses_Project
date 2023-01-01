@@ -1,26 +1,35 @@
 import { useState } from "react";
 import WaitingRoundAnimation from "./WaitningRoundAnimation";
 
-function ApproveExpenses({ item, setPageRefresh}) {
+function ApproveExpenses({ item, setPageRefresh }) {
   const expData = {
     expApprovalStatus: "",
     expComments: "",
   };
 
-  const [waitingBtnAnimation, setWaitingBtnAnimation] = useState(true)
+  const [waitingBtnAnimation, setWaitingBtnAnimation] = useState(true);
+  const [submitBtn, setSubmitBtn] = useState("Submit");
   const [expUpdateData, setExpUpdateData] = useState(expData);
+
+  if (!waitingBtnAnimation) {
+    const animationTimeOut = setTimeout(() => {
+      setWaitingBtnAnimation(true);
+      setSubmitBtn("Retry")
+      clearTimeout(animationTimeOut);
+    }, 10000);
+  }
 
   function handleChange(e) {
     const { name, value } = e.target;
     setExpUpdateData({ ...expUpdateData, [name]: value });
   }
   async function approveTransaction(id) {
-    setWaitingBtnAnimation(false)
+    setWaitingBtnAnimation(false);
     if (
       expUpdateData.expApprovalStatus === "Approved" ||
       expUpdateData.expApprovalStatus === "Rejected"
     ) {
-      await fetch(`/approval/${id}`, {
+      await fetch(`https://tidan-e-app.onrender.com/approval/${id}`, {
         method: "PATCH",
         timeout: 0,
         headers: {
@@ -34,7 +43,6 @@ function ApproveExpenses({ item, setPageRefresh}) {
         .catch((err) => {
           console.log(err);
         });
-
     } else {
       return console.warn("Please check Data");
     }
@@ -68,14 +76,17 @@ function ApproveExpenses({ item, setPageRefresh}) {
               true ? "cursor-pointer" : "opacity-10"
             } outline-none rounded border border-black dark:border-none`}
           >
-            <option value={null} hidden>{"--Select--"}</option>
+            <option value={null} hidden>
+              {"--Select--"}
+            </option>
             <option value="Approved">Approve</option>
             <option value="Rejected">Reject</option>
           </select>
         )}
       </li>
       <li className="w-52 flex justify-center items-center py-1">
-        {item.expApprovalStatus === "pending" ? <textarea
+        {item.expApprovalStatus === "pending" ? (
+          <textarea
             value={expUpdateData.expComments}
             onChange={handleChange}
             className={`${
@@ -87,11 +98,16 @@ function ApproveExpenses({ item, setPageRefresh}) {
             type="text"
             name="expComments"
             id=""
-          /> : <p>{item.expComments !== " " ? item.expComments : "----"}</p>}
+          />
+        ) : (
+          <p>{item.expComments !== " " ? item.expComments : "----"}</p>
+        )}
       </li>
       <li className="w-20 dark:text-black text-white">
         {item.expApprovalStatus.toLowerCase() === "rejected" ? (
-          <button className="cursor-pointer bg-black hover:bg-white hover:text-black dark:bg-white dark:hover:bg-black dark:hover:text-white dark:hover:border-white w-full py-1 rounded border border-transparent hover:border-black">Edit</button>
+          <button className="cursor-pointer bg-black hover:bg-white hover:text-black dark:bg-white dark:hover:bg-black dark:hover:text-white dark:hover:border-white w-full py-1 rounded border border-transparent hover:border-black">
+            Edit
+          </button>
         ) : item.expApprovalStatus.toLowerCase() === "approved" ? (
           <button className="cursor-pointer bg-black hover:bg-white hover:text-black dark:bg-white dark:hover:bg-black dark:hover:text-white dark:hover:border-white w-full py-1 rounded border border-transparent hover:border-black">
             View
@@ -101,10 +117,10 @@ function ApproveExpenses({ item, setPageRefresh}) {
             onClick={() => {
               approveTransaction(item._id);
             }}
-            className={`cursor-pointer bg-black hover:bg-white hover:text-black dark:bg-white dark:hover:bg-black dark:hover:text-white dark:hover:border-white w-full py-1 rounded border border-transparent hover:border-black`}
+            className={`cursor-pointer bg-blue-500 hover:bg-white hover:text-black dark:bg-blue-400 dark:hover:bg-black dark:hover:text-white dark:hover:border-blue-700 w-full py-1 rounded border border-transparent hover:border-black`}
             // disabled={!item.userLevel >= 0 ? true : false}
           >
-            {!waitingBtnAnimation? <WaitingRoundAnimation/> : "Submit"}
+            {!waitingBtnAnimation ? <WaitingRoundAnimation /> : submitBtn}
           </button>
         )}
       </li>

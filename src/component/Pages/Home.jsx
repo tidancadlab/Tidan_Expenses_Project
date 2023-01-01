@@ -33,14 +33,19 @@ function NavBar({ titleName }) {
   const [cookies, setCookies, dltCookies] = useCookies();
 
   useEffect(() => {
-    if (loggedUser.userId === undefined) {
+    if (!(!token1)) {
       API();
+      console.log(token1.slice(0,5));
     }
-  });
+    // console.log(!(!token1) && loggedUser.userId === undefined);
+  },[]);
+
+
+  
 
   //<-----fetch API---->
   const API = async () => {
-   const userData = await fetch("/loggedUserData", {
+    const userData = await fetch("https://tidan-e-app.onrender.com/loggedUserData", {
       method: "POST",
       crossDomain: true,
       headers: {
@@ -48,14 +53,11 @@ function NavBar({ titleName }) {
         Accept: "application/json",
         "Access-Control-Allow-Origin": "*",
       },
-      body: JSON.stringify({ token: cookies.token }),
+      body: JSON.stringify({ token: token1 }),
     })
       .then((response) => response.json())
       .then((result) => setLoggedUser(result))
-      .catch((error) => alert("error", error));
-
-    setUserPtyData("this is test Only");
-    // alert(userPtyData);
+      .catch((error) => console.log("error", error));
   };
 
   return (
@@ -85,23 +87,25 @@ function NavBar({ titleName }) {
               }
             />
             {!token1 ? (
-              <><Route
-                path="/Login"
-                element={
-                  <LoginPage titleName={titleName} loggedUser={loggedUser} />
-                }
-              />
-              <Route
-              path="/Register"
-              element={<Register titleName={titleName} />}
-            /></>
+              <>
+                <Route
+                  path="/Login"
+                  element={
+                    <LoginPage titleName={titleName} loggedUser={loggedUser} />
+                  }
+                />
+                <Route
+                  path="/Register"
+                  element={<Register titleName={titleName} />}
+                />
+              </>
             ) : (
               <>
-              <Route path={"/Login"} element={<Navigate to="/" />} />
-              <Route path={"/Register"} element={<Navigate to="/" />} />
+                <Route path={"/Login"} element={<Navigate to="/" />} />
+                <Route path={"/Register"} element={<Navigate to="/" />} />
               </>
             )}
-            
+
             <Route
               path="/Blog"
               element={<ConstructPage titleName={titleName} />}
@@ -115,7 +119,7 @@ function NavBar({ titleName }) {
               element={<ConstructPage titleName={titleName} />}
             />
           </Route>
-          {true ? (
+          {token1 ? (
             <Route
               path="/e-app/:id/"
               element={

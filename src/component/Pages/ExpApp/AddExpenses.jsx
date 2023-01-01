@@ -16,22 +16,19 @@ import {
   BsFillMouse3Fill,
   BsSearch,
 } from "react-icons/bs";
-import { VscBracketError } from "react-icons/vsc";
 import moment from "moment/moment";
 import { useEffect, useState } from "react";
-import Skeleton from "../../js/Skeleton";
 import dataNotFoundImg from "../../../Images/2451354.jpg";
 import ExpView from "./contenet/ExpView";
 import ProgressBar from "./contenet/ProgressBar";
-import buttonClick from "../../../Music/buttonClick.mp3";
 import successClick from "../../../Music/successClick.mp3";
-import NewExpEntry from "./contenet/NewExpEntry";
 import TranTable from "./Expenses/TranTable";
 import {
   createSearchParams,
   useParams,
   useSearchParams,
 } from "react-router-dom";
+import AddNewExpenses from "./contenet/AddExpensesPage";
 
 const currencyFormat = (value) =>
   new Intl.NumberFormat("en-IN", {
@@ -39,11 +36,6 @@ const currencyFormat = (value) =>
     currency: "INR",
   }).format(value);
 
-// let skeleton = [];
-// for (let index = 0; index < 10; index++) {
-//   skeleton.push(<Skeleton />);
-// }
-// let TheSkeleton = <div className="flex flex-col">{skeleton}</div>;
 
 function AddExpenses({ titleName, loggedUser }) {
   titleName.innerHTML = "Expenses-Tidan Expenses";
@@ -54,117 +46,7 @@ function AddExpenses({ titleName, loggedUser }) {
   const [expendSearch, setExpendSearch] = useState(true);
   const [noDataProgress, setNoDataProgress] = useState("");
   const params = useParams();
-  const exData = {
-    expDate: new Date().getTime() + 19800,
-    expItem: "",
-    expVendor: "Local",
-    expAmount: "",
-    expRemark: "",
-    expUploaded: loggedUser.userName,
-    expApprovalStatus: "Pending",
-    expComments: "",
-    userLevel: loggedUser.userProperty.userLevel,
-    userId: loggedUser.userId,
-  };
-  const [expensesData, setExpensesData] = useState(exData);
-
-  const timestamp = Date.now() - 200000000;
-  const moreThreeDay = moment(timestamp).format("DD-MM-YYYY");
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setExpensesData({ ...expensesData, [name]: value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (expensesData.expItem.length === 0) {
-      new Audio(successClick).play();
-      return setInputErr(
-        <div>
-          <ProgressBar
-            cssColor={"bg-[#dc3545]"}
-            message={"Please enter Item Details"}
-            cssMessage={"text-red-500"}
-          />
-        </div>
-      );
-    }
-    if (expensesData.expAmount.length === 0) {
-      new Audio(buttonClick).play();
-      return setInputErr(
-        <div>
-          <ProgressBar
-            cssColor={"bg-red-500"}
-            message={"Please Enter Amount"}
-            cssMessage={"text-red-500"}
-          />
-        </div>
-      );
-    }
-    if (exData.userId === undefined) {
-      return setInputErr(
-        <div>
-          <ProgressBar
-            cssColor={"bg-[#dc3545]"}
-            cssMessage={"text-red-500"}
-            message={"Please enter User Name"}
-          />
-        </div>
-      );
-    } else {
-      await fetch("https://tidan-e-app.onrender.com/addNewExpenses/add", {
-        method: "POST",
-        crossDomain: true,
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify(expensesData),
-      })
-        .then(async (res) => {
-          let dataResult = await res.json();
-          if (res.status === 200) {
-            setInputErr(
-              <div>
-                <ProgressBar
-                  cssColor={"bg-green-500"}
-                  cssMessage={"text-green-500 lowercase"}
-                  message={
-                    "Registered Successfully (id No. is " + dataResult._id + ")"
-                  }
-                />
-              </div>
-            );
-            expDataResat();
-          } else {
-            setInputErr(
-              <div>
-                <ProgressBar
-                  cssColor={"bg-red-500"}
-                  cssMessage={"text-red-500"}
-                  message={"Something Went Wrong"}
-                />
-              </div>
-            );
-          }
-        })
-        .catch((err) => {
-          console.log("error", err);
-        });
-    }
-  };
-
-  const expDataResat = () => {
-    expensesData.expDate = new Date().getTime() + 19800;
-    expensesData.expItem = "";
-    expensesData.expVendor = " ";
-    expensesData.expAmount = "";
-    expensesData.expRemark = "";
-    expensesData.expApprovalStatus = "Pending";
-  };
-
+  
   const DataApi = async () => {
     await fetch(`https://tidan-e-app.onrender.com/dashBoard`, {
       method: "POST",
@@ -212,7 +94,7 @@ function AddExpenses({ titleName, loggedUser }) {
   }
 
   function deleteItem(id) {
-    fetch("http://localhost:8000/addExpenses/" + id, {
+    fetch("https://tidan-e-app.onrender.com/addExpenses/" + id, {
       method: "DELETE",
     }).then((result) => {
       result.json().then(async (resp) => {
@@ -233,7 +115,11 @@ function AddExpenses({ titleName, loggedUser }) {
   const [searchParams, SetSearchParams] = useSearchParams("");
   const dataUrl = searchParams.get("tranDate");
   let searchData = tran.filter(function (v) {
-    return v.expDate.includes(dataUrl !== null ? dataUrl : "");
+    if (dataUrl === null) {
+      return v.expDate.includes("");
+    }else{
+      return v.expDate.includes(dataUrl);
+    }
   });
 
   const expURL = searchParams.get("tran");
@@ -319,14 +205,15 @@ function AddExpenses({ titleName, loggedUser }) {
 
     SetSearchParams(
       createSearchParams({
-        tran: name === "item" ? value : (searchParams.get("tran") || ""),
-        tranDate: name === "date" ? value : (searchParams.get("tranDate") || ""),
+        tran: name === "item" ? value : searchParams.get("tran") || "",
+        tranDate: name === "date" ? value : searchParams.get("tranDate") || "",
       })
     );
   };
 
   return (
     <>
+      {addBtn && <AddNewExpenses setAddBtn={setAddBtn} />}
       <div
         className={`${
           darkMode === "dark" ? "bg-img" : "bg-img3"
@@ -335,7 +222,7 @@ function AddExpenses({ titleName, loggedUser }) {
         <div className="flex ml-32 upto-lab-s:ml-0 justify-center">
           {loggedUser ? (
             <div className="container mt-9 p-2 border-black dark:border-white rounded-3xl">
-              <div className="w-full mb-3 flex justify-between dark:text-white">
+              <div className="w-full relative mb-3 flex justify-between dark:text-white">
                 {searchTran ? (
                   <div
                     // onBlur={() => setExpendSearch(true)}
@@ -411,9 +298,13 @@ function AddExpenses({ titleName, loggedUser }) {
                   </div>
                 )}
 
-                <div className="border border-black flex rounded-lg bg-white">
+                <div className="border border-black flex rounded-lg bg-white dark:bg-slate-800 border-transparent">
                   <input
-                    className={`${searchParams.get("tranDate")? "opacity-100" : "opacity-40 uppercase"} max-w-lg px-4 scrn-mob:max-w-fit outline-none bg-transparent text-black dark:text-white`}
+                    className={`${
+                      searchParams.get("tranDate")
+                        ? "opacity-100"
+                        : "opacity-40 uppercase"
+                    } max-w-lg px-4 scrn-mob:max-w-fit outline-none bg-transparent text-black dark:text-white`}
                     onChange={searchQuery}
                     value={searchParams.get("tranDate") || ""}
                     defaultValue="2022-10-10"
@@ -429,20 +320,22 @@ function AddExpenses({ titleName, loggedUser }) {
                 >
                   {inputErr}
                 </div>
-                <div
-                  onClick={() => setAddBtn(addBtn ? false : true)}
-                  className={`${
-                    addBtn
-                      ? " after:content-['Close'] shad pr-2"
-                      : "hover:after:content-['Add_Expenses'] hover:pr-2"
-                  } flex gap-1 text-xs bg-white p-1 justify-center items-center h-full border border-black rounded-full cursor-pointer dark:text-black ease-in-out duration-300`}
-                >
-                  <BsFillPlusCircleFill
+                {!addBtn && (
+                  <div
+                    onClick={() => setAddBtn(addBtn ? false : true)}
                     className={`${
-                      !addBtn ? "rotate-0" : "rotate-[675deg]"
-                    } text-xl ease-in-out duration-300`}
-                  />
-                </div>
+                      addBtn
+                        ? " after:content-['Close'] shad pr-2"
+                        : "hover:after:content-['Add_Expenses'] hover:pr-2"
+                    } absolute right-2 flex gap-1 text-xs bg-white p-1 justify-center items-center h-8 border border-black rounded-full cursor-pointer dark:text-black ease-in-out duration-300`}
+                  >
+                    <BsFillPlusCircleFill
+                      className={`${
+                        !addBtn ? "rotate-0" : "rotate-[675deg]"
+                      } text-xl ease-in-out duration-300`}
+                    />
+                  </div>
+                )}
               </div>
               <div className="dataDiv p-2 min-h-[610px] rounded shadow-xl dark:shadow-2xl dark:shadow-black ease-in-out duration-500 bg-white">
                 <ul className="flex justify-between px-1 py-1 uppercase items-center rounded-t text-white border-b border-dashed border-white divide-x divide-dashed divide-white bg-black">
@@ -486,14 +379,14 @@ function AddExpenses({ titleName, loggedUser }) {
                     <BsFillMouse3Fill /> Action
                   </li>
                 </ul>
-                {addBtn && (
+                {/* {addBtn && (
                   <NewExpEntry
                     handleSubmit={handleSubmit}
                     moment={moment}
                     expensesData={expensesData}
                     handleChange={handleChange}
                   />
-                )}
+                )} */}
                 {limitedTran.length !== 0 ? (
                   <div className=" ">
                     {limitedTran.map((item, idx) => {
@@ -509,7 +402,7 @@ function AddExpenses({ titleName, loggedUser }) {
                             currencyFormat={currencyFormat}
                             viewExpenses={viewExpenses}
                             deleteItem={deleteItem}
-                            moreThreeDay={moreThreeDay}
+                            // moreThreeDay={moreThreeDay}
                           />
                         </ul>
                       );

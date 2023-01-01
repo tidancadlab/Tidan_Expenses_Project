@@ -60,8 +60,6 @@ function LoginPage({ titleName, loggedUser }, props) {
         console.log(err, "user Not found");
       });
   };
-  window.localStorage.setItem("userData", JSON.stringify(userData));
-  console.log(btnName);
   return (
     <>
       {isLogged ? (

@@ -1,6 +1,8 @@
+import moment from "moment";
 import { useEffect } from "react";
 import { useState } from "react";
 import {
+  BsDistributeVertical,
   BsFillCalendarEventFill,
   BsFillCartFill,
   BsFillChatLeftQuoteFill,
@@ -8,14 +10,18 @@ import {
   BsFillFileEarmarkBinaryFill,
   BsFillFileEarmarkPdfFill,
   BsFillPieChartFill,
+  BsPersonBadgeFill,
   BsShop,
+  BsX,
 } from "react-icons/bs";
 import { HiCurrencyRupee } from "react-icons/hi";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import ProgressBar from "./ProgressBar";
 
-function AddNewExpenses() {
+function AddNewExpenses({ setAddBtn }) {
   const [file, setFile] = useState("");
   const [user, setUser] = useState([]);
+  const [inputErr, setInputErr] = useState("");
   const params = useParams();
 
   useEffect(() => {
@@ -33,164 +39,345 @@ function AddNewExpenses() {
       .then((data) => setUser(data));
   }, []);
 
-  const expData = {};
-  const [newExpData, setNewExpData] = useState(expData);
-  const handleSubmit = (e) => {
+  const expData = {
+    expAmount: "",
+    expDate: "",
+    expFile: file,
+    invoiceNum: "",
+    expItem: "",
+    paymentHead: "",
+    paymentType: "",
+    projectName: "",
+    expRemark: "",
+    reportingOfficer: "",
+    expVendor: "",
+    uploadTime: "",
+    expComments: "",
+    userLevel: 0,
+    userId: "",
+    expUploaded: "",
+  };
+  const [expensesData, setExpensesData] = useState(expData);
+  const handleChange = (e) => {
     e.preventDefault();
     const { id, value } = e.target;
-    setNewExpData({ ...newExpData, [id]: value });
+    setExpensesData({ ...expensesData, [id]: value });
+  };
+
+  
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let {
+      uploadTime,
+      expAmount,
+      expDate,
+      expItem,
+      expRemark,
+      expVendor,
+      expComments,
+      userLevel,
+      userId,
+      expUploaded,
+      expFile,
+    } = expensesData;
+    uploadTime = Date();
+    userLevel =
+      user.userProperty === undefined ? "" : user.userProperty.userLevel;
+    userId = user._id;
+    expUploaded = user.userName;
+    expFile = file;
+    expComments = "";
+    if (expensesData.expDate.length === 0) {
+      setInputErr("")
+      // new Audio(successClick).play();
+      return setInputErr(
+        <div>
+          <ProgressBar
+            cssColor={"bg-[#dc3545]"}
+            message={"Please select Item Bill Date"}
+            cssMessage={"text-red-500"}
+          />
+        </div>
+      );
+    }
+    if (expensesData.expItem.length === 0) {
+      // new Audio(successClick).play();
+      return setInputErr(
+        <div>
+          <ProgressBar
+            cssColor={"bg-[#dc3545]"}
+            message={"Please enter Item Details"}
+            cssMessage={"text-red-500"}
+          />
+        </div>
+      );
+    }
+    if (expensesData.expAmount.length === 0) {
+      // new Audio(buttonClick).play();
+      return setInputErr(
+        <div>
+          <ProgressBar
+            cssColor={"bg-red-500"}
+            message={"Please Enter Amount"}
+            cssMessage={"text-red-500"}
+          />
+        </div>
+      );
+    } else {
+      await fetch("https://tidan-e-app.onrender.com/addNewExpenses/add", {
+        method: "POST",
+        crossDomain: true,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify({
+          uploadTime,
+          expAmount,
+          expDate,
+          expItem,
+          expRemark,
+          expVendor,
+          expComments,
+          userLevel,
+          userId,
+          expUploaded,
+        }),
+      })
+        .then(async (res) => {
+          let dataResult = await res.json();
+          if (res.status === 200) {
+            setInputErr(
+              <div>
+                <ProgressBar
+                  cssColor={"bg-green-500"}
+                  cssMessage={"text-green-500 lowercase"}
+                  message={
+                    "Registered Successfully (id No. is " + dataResult._id + ")"
+                  }
+                />
+              </div>
+            );
+            setFile("");
+            setExpensesData({
+              expAmount: "",
+              expDate: "",
+              invoiceNum: "",
+              expItem: "",
+              paymentHead: "",
+              paymentType: "",
+              projectName: "",
+              expRemark: "",
+              reportingOfficer: "",
+              expVendor: "",
+              uploadTime: "",
+            });
+          } else {
+            setInputErr(
+              <div>
+                <ProgressBar
+                  cssColor={"bg-red-500"}
+                  cssMessage={"text-red-500"}
+                  message={"Something Went Wrong"}
+                />
+              </div>
+            );
+          }
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
+      console.log(expensesData);
+    }
   };
   return (
     <>
-      <div className="bg-img p-10 rounded-2xl">
-        <div className="">
-          <div className="flex flex-row m-auto">
-            {user && (
-              <div className="bg-[#fc8874] w-72 py-6 rounded-l-xl">
-                <h1 className="text-2xl">
-                  Mr. {user.userName} (L-{})
-                </h1>
-                <h2></h2>
-              </div>
-            )}
-            <div className="p-8 bg-orange-400 dark:bg-[#212121] dark:text-white rounded-r-xl">
+      <div className="absolute bg-opacity-70 h-screen w-[calc(100vw-68px)] right-0 flex bg-black z-50">
+        <div className="m-auto ">
+          <div>{inputErr}</div>
+          <div className="flex flex-row relative">
+            <button
+              onClick={() => {
+                setAddBtn(false);
+              }}
+              className=" absolute -right-8 -top-8 w-8 h-8 border border-transparent rounded-full flex justify-center items-center bg-blue-500 text-white text-2xl"
+            >
+              <BsX />
+            </button>
+
+            <div className="p-8 bg-orange-400 dark:bg-[#212121] dark:text-white rounded-xl">
               <form
-                onChange={handleSubmit}
+                onSubmit={handleSubmit}
                 className="flex gap-5 flex-wrap w-[640px] addExpForm border border-dashed p-5"
               >
                 <div className="flex gap-5 w-full">
-                  <div className="flex flex-col text-left gap-1">
+                  <div className="flex flex-col text-left gap-2">
                     <label
-                      htmlFor="date"
-                      className="flex gap-2 items-center ml-2"
+                      htmlFor="expDate"
+                      className="flex gap-2 items-center ml-2 text-sm"
                     >
                       <BsFillCalendarEventFill className="text-sm" /> Date
                     </label>
                     <input
                       type="date"
-                      id="date"
-                      className="rounded p-1 min-w-[147px] text-black uppercase outline-none"
+                      id="expDate"
+                      onChange={handleChange}
+                      value={moment(expensesData.expDate).format("YYYY-MM-DD")}
+                      className="rounded p-1 min-w-[147px] text-black uppercase outline-blue-400"
                     />
                   </div>
-                  <div className="flex flex-col text-left gap-1 w-full">
+                  <div className="flex flex-col text-left gap-2 w-full">
                     <label
-                      htmlFor="item"
-                      className="flex gap-2 items-center ml-2"
+                      htmlFor="expItem"
+                      className="flex gap-2 items-center ml-2 text-sm"
                     >
                       <BsFillCartFill /> Item Description
                     </label>
                     <input
+                      onChange={handleChange}
+                      value={expensesData.expItem}
                       type="text"
-                      id="item"
+                      id="expItem"
                       placeholder="Example Item"
-                      className="rounded px-2 py-1 text-black outline-red-500"
+                      className="rounded px-2 py-1 text-black outline-blue-400"
                     />
                   </div>
                 </div>
                 <div className="flex gap-5 w-full">
-                  <div className="flex flex-col text-left gap-1 w-full">
+                  <div className="flex flex-col text-left gap-2 w-full">
                     <label
-                      htmlFor="vender"
-                      className="flex gap-2 items-center ml-2"
+                      htmlFor="expVendor"
+                      className="flex gap-2 items-center ml-2 text-sm"
                     >
                       <BsShop /> Vender
                     </label>
                     <input
+                      onChange={handleChange}
+                      value={expensesData.expVendor}
                       type="text"
-                      id="vender"
+                      id="expVendor"
                       placeholder="Purchased from"
-                      className="rounded px-2 py-1 text-black outline-none"
+                      className="rounded px-2 py-1 text-black outline-blue-400"
                     />
                   </div>
-                  <div className="flex flex-col text-left gap-1 max-w-[150px]">
+                  <div className="flex flex-col text-left gap-2 max-w-[150px]">
                     <label
-                      htmlFor="amount"
-                      className="flex gap-2 items-center ml-2"
+                      htmlFor="expAmount"
+                      className="flex gap-2 items-center ml-2 text-sm"
                     >
                       <HiCurrencyRupee /> Amount
                     </label>
                     <input
+                      onChange={handleChange}
+                      value={expensesData.expAmount}
                       type="number"
-                      id="amount"
+                      id="expAmount"
                       placeholder="5210.01"
-                      className="rounded px-2 py-1 text-black outline-none"
+                      className="rounded px-2 py-1 text-black outline-blue-400"
                     />
                   </div>
                 </div>
                 <div className="flex gap-5 w-full">
-                  <div className="flex flex-col text-left gap-1 max-w-[200px]">
+                  <div className="flex flex-col text-left gap-2 max-w-[200px]">
                     <label
                       htmlFor="invoiceNum"
-                      className="flex gap-2 items-center ml-2"
+                      className="flex gap-2 items-center ml-2 text-sm"
                     >
                       <BsFillFileEarmarkBinaryFill /> Invoice Number
                     </label>
                     <input
+                      onChange={handleChange}
+                      value={expensesData.invoiceNum}
                       type="text"
                       id="invoiceNum"
-                      className="rounded px-2 py-1 text-black outline-none"
+                      className="rounded px-2 py-1 text-black outline-blue-400"
                     />
                   </div>
-                  <div className="flex flex-col text-left gap-1 min-w-fit box-border">
+                  <div className="flex flex-col text-left gap-2 min-w-fit">
                     <label
                       htmlFor="head"
-                      className="flex gap-2 items-center ml-2 pr-5"
+                      className="flex gap-2 items-center ml-2 text-sm pr-5"
                     >
                       <BsFillPieChartFill /> Payment Head
                     </label>
                     <select
+                      onChange={handleChange}
+                      value={expensesData.paymentHead}
                       id="paymentHead"
-                      className="rounded px-2 py-1 text-black outline-none h-8"
+                      className="rounded px-2 py-1 text-black outline-blue-400 h-8"
                     >
                       <option value="null" hidden selected>
                         Select
                       </option>
-                      <option value="grocery">grocery</option>
-                      <option value="site purchase">site</option>
-                      <option value="office">office</option>
+                      <option value="grocery">Grocery</option>
+                      <option value="site local">Site Local</option>
+                      <option value="office">Office</option>
                     </select>
                   </div>
-                  <div className="flex flex-col text-left gap-1 max-w-[200px]">
+                  <div className="flex flex-col text-left gap-2 max-w-[200px]">
                     <label
                       htmlFor="project"
-                      className="flex gap-2 items-center ml-2"
+                      className="flex gap-2 items-center ml-2 text-sm"
                     >
                       <BsFillEaselFill /> Project Name
                     </label>
                     <input
-                      className="rounded max-w-fit px-2 py-1 text-black outline-none h-8"
+                      onChange={handleChange}
+                      list="projectList"
+                      className="rounded max-w-fit px-2 py-1 text-black outline-blue-400 h-8"
                       type="text"
                       name="project"
                       id="projectName"
                     />
+                    <datalist id="projectList">
+                      <option value="RBPL">RBPL</option>
+                      <option value="BCPL">BCPL</option>
+                      <option value="IHPL">IHPL</option>
+                      <option value="DSPL">DSPL</option>
+                      <option value="PAJPL">PAJPL</option>
+                      <option value="Barnala MDPE">Barnala MDPE</option>
+                      <option value="Doraha MDPE">Doraha MDPE</option>
+                    </datalist>
                   </div>
                 </div>
                 <div className="flex gap-5 w-full">
-                  <div className="flex flex-col text-left gap-1">
-                    <label htmlFor="paymentType" className="">
-                      Payment Type
+                  <div className="flex flex-col text-left gap-2 w-full">
+                    <label
+                      htmlFor="paymentType"
+                      className="flex gap-2 items-center ml-2 text-sm"
+                    >
+                      <BsDistributeVertical /> Payment Type
                     </label>
                     <select
+                      onChange={handleChange}
+                      value={expensesData.paymentType}
                       id="paymentType"
-                      className="rounded px-2 py-1 text-black outline-none h-8"
+                      className="rounded px-2 py-1 text-black outline-blue-400 h-8"
                     >
                       <option value="null" hidden selected>
                         Select
                       </option>
-                      <option value="Local Purchase">Local Purchase</option>
+                      <option value="project Purchase">Project Purchase</option>
                       <option value="Vender Payment">Vender Payment</option>
                       <option value="Contractor Payment">
                         Contractor Payment
                       </option>
                     </select>
                   </div>
-                  <div className="flex flex-col text-left gap-1">
-                    <label htmlFor="reportingOfficer" className="">
-                      Reporting Officer
+                  <div className="flex flex-col text-left gap-2 w-full">
+                    <label
+                      htmlFor="reportingOfficer"
+                      className="flex gap-2 items-center ml-2 text-sm"
+                    >
+                      <BsPersonBadgeFill /> Reporting Officer
                     </label>
                     <select
+                      onChange={handleChange}
+                      value={expensesData.reportingOfficer}
                       id="reportingOfficer"
-                      className="rounded px-2 py-1 text-black outline-none h-8"
+                      className="rounded px-2 py-1 text-black outline-blue-400 h-8"
                     >
                       <option value="null" hidden selected>
                         Select
@@ -200,7 +387,7 @@ function AddNewExpenses() {
                       <option value="Pradeep Ojha">Pradeep Ojha</option>
                     </select>
                   </div>
-                  <div className="flex flex-col text-left gap-1 max-w-[235px]">
+                  <div className="flex flex-col text-left gap-2 w-full">
                     {file === "" ? (
                       <>
                         <label
@@ -210,59 +397,54 @@ function AddNewExpenses() {
                           <BsFillFileEarmarkPdfFill /> Upload Bill
                         </label>
                         <input
+                          onChange={(e) => setFile(e.target.value)}
                           type="file"
                           id="file"
                           placeholder="Select"
                           className="hidden"
                           accept="image/png, image/jpeg, .pdf"
-                          onChange={(e) => setFile(e.target.value)}
                         />{" "}
                       </>
                     ) : (
                       <div
                         title={file.slice(12)}
-                        className="flex flex-col gap-1 h-full"
+                        className="flex flex-col gap-2 h-full"
                       >
-                        <span className="flex gap-2 items-center ml-2 pr-5">
+                        <span className="flex gap-2 items-center ml-2 text-sm pr-5">
                           <BsFillFileEarmarkPdfFill /> Enclosed Bill
                         </span>
-                        <span className="bg-white text-sm text-black h-8 flex items-center px-2 rounded gap-1">
+                        <span className="bg-violet-300 relative text-sm text-violet-800 h-8 flex items-center px-2 rounded">
                           {file.slice(
-                            file.length > 28 ? file.length - 22 : 12,
+                            file.length > 28 ? file.length - 19 : 12,
                             file.length
                           )}{" "}
                           <span
                             onClick={() => setFile("")}
-                            className="px-1.5 flex justify-center items-center border-black rounded-full border"
+                            className="absolute right-2 flex justify-center items-center cursor-pointer text-lg rounded h-4 w-4"
                           >
-                            X
+                            <BsX />
                           </span>
                         </span>
                       </div>
                     )}
                   </div>
                 </div>
-                <div className="flex flex-col text-left gap-1 w-full">
+                <div className="flex flex-col text-left gap-2 w-full">
                   <label
-                    htmlFor="remark"
-                    className="flex gap-2 items-center ml-2 pr-5"
+                    htmlFor="expRemark"
+                    className="flex gap-2 items-center ml-2 text-sm pr-5"
                   >
                     <BsFillChatLeftQuoteFill className="mt-1" /> Remark
                   </label>
                   <textarea
+                    onChange={handleChange}
+                    value={expensesData.expRemark}
                     type="text"
-                    id="remark"
-                    className="rounded p-2 min-h-[100px] text-black outline-none"
+                    id="expRemark"
+                    className="rounded p-2 min-h-[100px] text-black outline-blue-400"
                   />
                 </div>
-                <button
-                type="submit"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    console.log(newExpData);
-                  }}
-                  className="border w-full py-2 bg-white rounded"
-                >
+                <button className="border w-full py-2 bg-white dark:bg-blue-500 dark:border-transparent rounded">
                   Submit
                 </button>
               </form>

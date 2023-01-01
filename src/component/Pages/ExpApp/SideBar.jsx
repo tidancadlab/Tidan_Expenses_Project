@@ -31,7 +31,7 @@ function SideBar({ loggedUser, darkMode, setDarkMode }) {
         <div
           className={`h-screen overflow-y-auto upto-lab-s:justify-around upto-lab-s:items-stretch items-center upto-lab-s:p-0 ease-in-out duration-100 flex flex-col bg-[#253659] dark:bg-gray-800 upto-lab-s:w-full upto-lab-s:h-fit upto-lab-s:pt-1  pt-16`}
         >
-          <div className="relative flex flex-col upto-lab-s:justify-around upto-lab-s:flex-row text-white dark:text-black upto-lab-s:gap-1 upto-lab-s:p-0">
+          <div className="relative border-t pt-4 mt-2 border-dashed flex flex-col upto-lab-s:justify-around upto-lab-s:flex-row text-white dark:text-black upto-lab-s:gap-1 upto-lab-s:p-0">
             <CustomLink title="Dashboard" to={`dashboard`}>
               <ul
                 className={`upto-lab-s:py-1 py-4 px-2 upto-lab-s:justify-center justify-center flex`}
@@ -91,7 +91,7 @@ function SideBar({ loggedUser, darkMode, setDarkMode }) {
             <div className="relative w-full mb-10 mt-5   flex justify-center">
               <div className="h-1.5 rounded-full w-3/4 scrn-tab:hidden bg-white"></div>
             </div>
-            <CustomLink title="Setting" to="setting">
+            {/* <CustomLink title="Setting" to="setting">
               <ul>
                 <li
                   className={`ease-in duration-100 flex flex-col justify-center items-center w-full h-full   dark:text-white`}
@@ -101,7 +101,7 @@ function SideBar({ loggedUser, darkMode, setDarkMode }) {
                   </span>
                 </li>
               </ul>
-            </CustomLink>
+            </CustomLink> */}
             <ul>
               <li className="w-full items-center flex justify-center">
                 <div
