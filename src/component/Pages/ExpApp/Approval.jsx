@@ -12,9 +12,9 @@ const notFoundImg = localStorage.getItem("notFoundImg");
 
 function Approval(props) {
   //<-----Variables------>
-  const { titleName, loggedUser } = props;
+  const { titleName, loggedUser, transData } = props;
   titleName.innerHTML = "Approval-Tidan Expenses";
-  const [tran, setTran] = useState([]);
+  const [tran, setTran] = useState(transData);
   let [currentPageNumber, setCurrentPageNumber] = useState(0);
   const [pageRefresh, setPageRefresh] = useState(true);
   const [userPtyData, setUserPtyData] = useState({});
@@ -59,7 +59,7 @@ function Approval(props) {
   /// <-------Array Filter by user------->
   const filteredTranArray = tran.filter(function (id) {
     if (loggedUser.userProperty !== undefined) {
-      return id.userLevel < loggedUser.userProperty.userLevel;
+      return id.userLevel < loggedUser.userProperty.userLevel && id.expApprovalStatus === "pending";
     }
   });
 

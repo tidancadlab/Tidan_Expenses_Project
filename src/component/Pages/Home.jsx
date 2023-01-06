@@ -28,33 +28,33 @@ function NavBar({ titleName }) {
   localStorage.setItem("DarkMode", darkMode);
   const [userPtyData, setUserPtyData] = useState("");
   const [loggedUser, setLoggedUser] = useState({});
+  const [transData, setTransData] = useState([]);
   let [urlParams, setUrlParams] = useState("");
   const token1 = localStorage.getItem("token");
   const [cookies, setCookies, dltCookies] = useCookies();
 
   useEffect(() => {
-    if (!(!token1)) {
+    if (!!token1) {
       API();
-      console.log(token1.slice(0,5));
     }
     // console.log(!(!token1) && loggedUser.userId === undefined);
-  },[]);
-
-
-  
+  }, []);
 
   //<-----fetch API---->
   const API = async () => {
-    const userData = await fetch("https://tidan-e-app.onrender.com/loggedUserData", {
-      method: "POST",
-      crossDomain: true,
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify({ token: token1 }),
-    })
+    const userData = await fetch(
+      "https://tidan-e-app.onrender.com/loggedUserData",
+      {
+        method: "POST",
+        crossDomain: true,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify({ token: token1 }),
+      }
+    )
       .then((response) => response.json())
       .then((result) => setLoggedUser(result))
       .catch((error) => console.log("error", error));
@@ -140,6 +140,8 @@ function NavBar({ titleName }) {
                     titleName={titleName}
                     data={LocalData}
                     loggedUser={loggedUser}
+                    setTransData={setTransData}
+                    transData ={transData}
                   />
                 }
               />
@@ -156,6 +158,7 @@ function NavBar({ titleName }) {
                     titleName={titleName}
                     expTransaction={LocalData.expTransaction}
                     loggedUser={loggedUser}
+                    transData ={transData}
                   />
                 }
               />
@@ -166,6 +169,7 @@ function NavBar({ titleName }) {
                     titleName={titleName}
                     expTransaction={LocalData.expTransaction}
                     loggedUser={loggedUser}
+                    transData ={transData}
                   />
                 }
               />
@@ -174,7 +178,6 @@ function NavBar({ titleName }) {
                 element={
                   <Graph
                     titleName={titleName}
-                    expTransaction={LocalData.expTransaction}
                   />
                 }
               />

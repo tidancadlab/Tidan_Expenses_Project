@@ -18,14 +18,15 @@ import { HiCurrencyRupee } from "react-icons/hi";
 import { Link, useParams } from "react-router-dom";
 import ProgressBar from "./ProgressBar";
 
-function AddNewExpenses({ setAddBtn }) {
+function AddNewExpenses(props) {
+  const { setAddBtn, moment } = props
   const [file, setFile] = useState("");
   const [user, setUser] = useState([]);
   const [inputErr, setInputErr] = useState("");
   const params = useParams();
 
   useEffect(() => {
-    fetch("/userDataProperty", {
+    fetch("https://tidan-e-app.onrender.com/userDataProperty", {
       method: "POST",
       crossDomain: true,
       headers: {
@@ -128,6 +129,7 @@ function AddNewExpenses({ setAddBtn }) {
       await fetch("https://tidan-e-app.onrender.com/addNewExpenses/add", {
         method: "POST",
         crossDomain: true,
+        timeOut:1000,
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
@@ -213,7 +215,7 @@ function AddNewExpenses({ setAddBtn }) {
                 className="flex gap-5 flex-wrap w-[640px] addExpForm border border-dashed p-5"
               >
                 <div className="flex gap-5 w-full">
-                  <div className="flex flex-col text-left gap-2">
+                  <div className="relative flex flex-col text-left gap-2">
                     <label
                       htmlFor="expDate"
                       className="flex gap-2 items-center ml-2 text-sm"
@@ -223,9 +225,11 @@ function AddNewExpenses({ setAddBtn }) {
                     <input
                       type="date"
                       id="expDate"
+                      min={moment(new Date(Date.now() - 550000000)).format("YYYY-MM-DD")}
+                      max={moment(new Date(Date.now() + 1980000)).format("YYYY-MM-DD")}
                       onChange={handleChange}
-                      value={moment(expensesData.expDate).format("YYYY-MM-DD")}
-                      className="rounded p-1 min-w-[147px] text-black uppercase outline-blue-400"
+                      value={expensesData.expDate ? moment(expensesData.expDate).format("YYYY-MM-DD") : moment(Date()).format("YYYY-MM-DD")}
+                      className="rounded p-1 text-black outline-blue-400"
                     />
                   </div>
                   <div className="flex flex-col text-left gap-2 w-full">

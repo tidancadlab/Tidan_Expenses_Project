@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BsArrowRight } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import svg1 from "../../Images/fileSearching.svg";
@@ -40,35 +39,39 @@ const HomeFirst = ({ titleName, loggedUser }, props) => {
   //   clearInterval(changeTime);
   // }, 5000);
 
+    //<----------Dark Background----------->
+
+    const darkMode = localStorage.getItem("DarkMode");
+
   return (
     <>
-      <div className="min-h-[calc(100vh-64px)] bg-css overflow-x-hidden dark:bg-none dark:bg-[#1c2747] dark:text-white">
+      <div className={`${darkMode === "dark"? "bg-img4":"bg-img5"} min-h-[calc(100vh)] pt-[4%] overflow-x-hidden dark:text-white`}>
         <div className="">
           <div className="relative h-full upto-lab-s:px-10 scrn-mob:py-5 rounded px-44 py-20">
             <div className="text-left">
-              <div className="bg-[#FCE742] dark:bg-[#ffffff] -ml-5 w-fit rounded-xl border-4 border-black shad-2">
-                <p className="text-xl text-left bg-clip-text font-Orbitron text-transparent bg-gradient-to-r from-[#025159] to-[#3E848C] py-3 px-5 font-bold ">
+              <div className="bg-[#FCE742] dark:bg-[#ffffff] -ml-5 w-fit rounded-x border-4 border-white shad-2">
+                <p className="text-xl text-left bg-clip-text font-Orbitron text-transparent bg-[#013440] py-3 px-5 font-bold ">
                   Is complicated to trace your Project and personal Expenses ?
                 </p>
               </div>
-              <h1 className="text-7xl w-72 mb-10 text-left font-bold text-[#4EFCB1] dark:text-[#6662f6] border-l-8 border-[#4EFCB1] dark:border-[#6662f6] pl-5 pb-5 -ml-5 mt-5">
+              <h1 className="text-7xl w-72 rounded-bl-2xl mb-10 text-left font-thin text-[#013440] dark:text-white border-4 border-[#013440] dark:border-white pl-5 pb-5 -ml-5 mt-5">
                 Don't{" "}
-                <span className="bg-[#4EFCB1] dark:bg-[#6662f6] text-[#FC8874] dark:text-white rounded-xl pb-1 px-2">
+                <span className="bg-[#013440] dark:bg-white text-[#fff] dark:text-[#262324] w-[280px] pb-1 px-8 pr-12 -ml-5">
                   worry,
                 </span>{" "}
                 We are here for{" "}
-                <span className="bg-[#4EFCB1] dark:bg-[#6662f6] text-[#FC8874] dark:text-white rounded-xl pb-3 px-2">
+                <span className="bg-[#013440] dark:bg-white text-[#fff] dark:text-[#262324] min-w-[80px] pb-4 px-8 pr-20 -ml-5 rounded-bl-lg">
                   you...
                 </span>
               </h1>
-              <Link to="e-app/:id" className="w-60 relative flex justify-center gap-1 items-center text-xl border border-transparent hover:border-[#4EFCB1] text-[#FC8874] hover:text-[#4EFCB1] py-4 rounded-full bg-[#4EFCB1] dark:bg-[#6662f6] hover:bg-transparent ease-in-out duration-300">
+              <Link to="e-app/:id" className="w-60 relative flex justify-center gap-1 items-center text-xl border border-transparent hover:border-[#013440] text-[#FC8874] hover:text-[#013440] py-4 rounded-full bg-[#013440] dark:bg-white hover:bg-transparent ease-in-out duration-300">
                 <span>Click here</span>{" "}
                 <span className="arrowMove">
                   <BsArrowRight />
                 </span>
               </Link>
             </div>
-            <div className="h-3/4 rounded-lg absolute top-44 right-24 hidden scrn-4k:block">
+            <div className="h-1/2 -mt-28 rounded-lg absolute top-44 right-24 hidden scrn-4k:block">
               {svgData.map((img, idx) => {
                 return (
                   <div key={idx} className="relative w-[800px]">

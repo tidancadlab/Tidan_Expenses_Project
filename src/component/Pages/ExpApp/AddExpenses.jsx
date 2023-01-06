@@ -1,6 +1,4 @@
 import {
-  BsFillEyeFill,
-  BsFillPencilFill,
   BsFillPlusCircleFill,
   BsX,
   BsArrowLeft,
@@ -23,6 +21,7 @@ import ExpView from "./contenet/ExpView";
 import ProgressBar from "./contenet/ProgressBar";
 import successClick from "../../../Music/successClick.mp3";
 import TranTable from "./Expenses/TranTable";
+import { expensesData } from "../../js/FetchModule";
 import {
   createSearchParams,
   useParams,
@@ -36,50 +35,32 @@ const currencyFormat = (value) =>
     currency: "INR",
   }).format(value);
 
-
-function AddExpenses({ titleName, loggedUser }) {
+function AddExpenses({ titleName, loggedUser, transData }) {
   titleName.innerHTML = "Expenses-Tidan Expenses";
   const [addBtn, setAddBtn] = useState(false);
-  const [tran, setTran] = useState([]);
+  const [tran, setTran] = useState(transData);
   const [inputErr, setInputErr] = useState("");
   const [searchTran, setSearchTran] = useState(false);
   const [expendSearch, setExpendSearch] = useState(true);
-  const [noDataProgress, setNoDataProgress] = useState("");
+  const [updateData, setUpdateData] = useState();
   const params = useParams();
-  
+
+
   const DataApi = async () => {
-    await fetch(`https://tidan-e-app.onrender.com/dashBoard`, {
-      method: "POST",
-      crossDomain: true,
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify({ userId: params.id }),
-    })
-      .then((response) => response.json())
-      .then((data) => setTran(data))
-      .catch((error) => {
-        setNoDataProgress(
-          <div className="w-full mt-5">
-            {" "}
-            <img
-              className="max-w-7xl m-auto rounded-md"
-              src={dataNotFoundImg}
-              alt="No data found"
-            />
-          </div>
-        );
-      });
+    const rs = await expensesData(
+      `https://tidan-e-app.onrender.com/dashBoard`,
+      params.id
+    );
+    rs.json().then((a) => setTran(a));
+    setUpdateData(rs.status)
   };
 
-  if (loggedUser.userId === undefined) {
+  if (params.id === undefined && !updateData) {
     DataApi();
   }
 
   useEffect(() => {
-    if (!tran) {
+    if (!updateData) {
       return;
     } else {
       DataApi();
@@ -117,7 +98,7 @@ function AddExpenses({ titleName, loggedUser }) {
   let searchData = tran.filter(function (v) {
     if (dataUrl === null) {
       return v.expDate.includes("");
-    }else{
+    } else {
       return v.expDate.includes(dataUrl);
     }
   });
@@ -131,7 +112,7 @@ function AddExpenses({ titleName, loggedUser }) {
     (a, b) => new Date(b.expDate) - new Date(a.expDate)
   );
   const [crPageNum, setCrPageNum] = useState(0);
-  const transactionPerPage = 10;
+  const transactionPerPage = 11;
   const visitedPage = crPageNum * transactionPerPage;
 
   let pageNumber = [];
@@ -213,7 +194,7 @@ function AddExpenses({ titleName, loggedUser }) {
 
   return (
     <>
-      {addBtn && <AddNewExpenses setAddBtn={setAddBtn} />}
+      {addBtn && <AddNewExpenses moment={moment} setAddBtn={setAddBtn} />}
       <div
         className={`${
           darkMode === "dark" ? "bg-img" : "bg-img3"
@@ -222,7 +203,7 @@ function AddExpenses({ titleName, loggedUser }) {
         <div className="flex ml-32 upto-lab-s:ml-0 justify-center">
           {loggedUser ? (
             <div className="container mt-9 p-2 border-black dark:border-white rounded-3xl">
-              <div className="w-full relative mb-3 flex justify-between dark:text-white">
+              <div className="w-full relative mb-3 p-2 rounded flex justify-between dark:text-white bg-blue-100">
                 {searchTran ? (
                   <div
                     // onBlur={() => setExpendSearch(true)}
@@ -247,11 +228,27 @@ function AddExpenses({ titleName, loggedUser }) {
                         placeholder="Search Transaction..."
                         id=""
                       />
+                      <div className="border w-5 relative border-black flex rounded-lg items-center dark:bg-slate-800 border-transparent">
+                        <label htmlFor="dateSearch">
+                          <BsCalendar />
+                        </label>
+                        <input
+                          className={`opacity-0`}
+                          onChange={searchQuery}
+                          value={searchParams.get("tranDate") || ""}
+                          defaultValue="2022-10-10"
+                          type="date"
+                          name="date"
+                          id="dateSearch"
+                        />
+                      </div>
                       <button
                         hidden={
-                          (searchParams.get("tran") === null
+                          (searchParams.get("tran") === null ||
+                          searchParams.get("tranDate") === null
                             ? 0
-                            : searchParams.get("tran").length) <= 0
+                            : searchParams.get("tran").length) <= 0 &&
+                          searchParams.get("tranDate") <= 0
                         }
                         onClick={() => {
                           SetSearchParams(createSearchParams({ tran: "" }));
@@ -292,27 +289,11 @@ function AddExpenses({ titleName, loggedUser }) {
                 ) : (
                   <div
                     onClick={() => setSearchTran(true)}
-                    className="border border-black dark:border-orange-500 hover:border-blue-600 hover:text-blue-600 p-3 rounded-full cursor-pointer"
+                    className="border border-black dark:border-orange-500 hover:border-blue-600 hover:text-blue-600 p-3 rounded-md cursor-pointer"
                   >
                     <BsSearch />
                   </div>
                 )}
-
-                <div className="border border-black flex rounded-lg bg-white dark:bg-slate-800 border-transparent">
-                  <input
-                    className={`${
-                      searchParams.get("tranDate")
-                        ? "opacity-100"
-                        : "opacity-40 uppercase"
-                    } max-w-lg px-4 scrn-mob:max-w-fit outline-none bg-transparent text-black dark:text-white`}
-                    onChange={searchQuery}
-                    value={searchParams.get("tranDate") || ""}
-                    defaultValue="2022-10-10"
-                    type="date"
-                    name="date"
-                    id=""
-                  />
-                </div>
                 <div
                   className={`${
                     inputErr.length !== 0 ? "opacity-100 " : "opacity-0"
@@ -323,22 +304,14 @@ function AddExpenses({ titleName, loggedUser }) {
                 {!addBtn && (
                   <div
                     onClick={() => setAddBtn(addBtn ? false : true)}
-                    className={`${
-                      addBtn
-                        ? " after:content-['Close'] shad pr-2"
-                        : "hover:after:content-['Add_Expenses'] hover:pr-2"
-                    } absolute right-2 flex gap-1 text-xs bg-white p-1 justify-center items-center h-8 border border-black rounded-full cursor-pointer dark:text-black ease-in-out duration-300`}
+                    className={`w-20 rounded right-2 flex gap-1 bg-blue-300 border text-blue-800 border-blue-800 p-1 justify-center items-center cursor-pointer dark:text-black`}
                   >
-                    <BsFillPlusCircleFill
-                      className={`${
-                        !addBtn ? "rotate-0" : "rotate-[675deg]"
-                      } text-xl ease-in-out duration-300`}
-                    />
+                    Add
                   </div>
                 )}
               </div>
-              <div className="dataDiv p-2 min-h-[610px] rounded shadow-xl dark:shadow-2xl dark:shadow-black ease-in-out duration-500 bg-white">
-                <ul className="flex justify-between px-1 py-1 uppercase items-center rounded-t text-white border-b border-dashed border-white divide-x divide-dashed divide-white bg-black">
+              <div className="dataDiv p-2 min-h-[610px] rounded shadow-xl dark:shadow-2xl dark:shadow-black ease-in-out duration-500 bg-white dark:bg-black dark:bg-opacity-30 dark:backdrop-blur-3xl bg-opacity-60 backdrop-blur-3xl">
+                <ul className="flex justify-between px-1 py-1 uppercase items-center rounded-t dark:text-white text-black border-b border-dashed border-white divide-x divide-dashed divide-white dark:bg-black bg-white bg-opacity-60">
                   <li className="flex-col w-[130px]">
                     <span className="flex items-center gap-1">
                       <BsCalendar /> Date
@@ -393,7 +366,7 @@ function AddExpenses({ titleName, loggedUser }) {
                       return (
                         <ul
                           key={item._id}
-                          className="flex last:border-none align-top px-1 py-1 divide-x divide-dashed divide-black border-b border-dashed border-black justify-between items-center text-black bg-transparent hover:bg-slate-100"
+                          className="flex last:border-none align-top px-1 py-1 divide-x divide-dashed dark:divide-white divide-black border-b border-dashed border-black dark:border-white justify-between items-center text-black dark:text-white bg-transparent "
                         >
                           <TranTable
                             item={item}

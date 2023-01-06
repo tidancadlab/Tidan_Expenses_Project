@@ -18,7 +18,6 @@ import { Outlet } from "react-router-dom";
 import { IoIosLogOut, IoMdLogIn } from "react-icons/io";
 import { MdOutlineContactSupport } from "react-icons/md";
 import { BiUserPlus } from "react-icons/bi";
-import { FaRegUserCircle } from "react-icons/fa";
 
 function CustomLink({ to, children, ...props }) {
   const resolvedPath = useResolvedPath(to);
@@ -27,8 +26,8 @@ function CustomLink({ to, children, ...props }) {
     <Link
       className={` ${
         isActive
-          ? "bg-[#428CFC] border-[#428CFC] text-black"
-          : "hover:border-transparent hover:bg-orange-300 dark:border-orange-300 border-black hover:text-orange-900"
+          ? "bg-[#381D71] border-[#381D71] text-"
+          : "hover:border-transparent hover:bg-orange-300 dark:border-orange-300 hover:text-orange-900"
       } mx-2 flex border px-2.5 py-1 rounded-full ease-in-out duration-100`}
       to={to}
       {...props}
@@ -44,22 +43,22 @@ const Nav = (props) => {
   const [navBar, setNavBar] = useState(false);
   const [profileDrop, setProfileDrop] = useState(true);
   const [expendUser, setExpendUser] = useState(true);
-  const [viewProfile, setViewProfile] = useState(false);
+  const [viewProfile, setViewProfile] = useState(false);  // this is for profile view
   const token = localStorage.getItem("token");
 
   return (
     <>
-      <div className="z-10 w-full fixed">
+      <div className="z-10 w-full scrn-4k:fixed">
         <nav
-          className={`ease-linear duration-200 upto-lab-s:px-2 justify-around dark:bg-gray-700 bg-[#4EFCB1] upto-lab-s:justify-between upto-lab-s:gap-2 gap-5 h-16 upto-lab-s:h-10 flex items-center w-full`}
+          className={`upto-lab-s:px-2 justify-around dark:bg-gray-700 upto-lab-s:justify-between upto-lab-s:gap-2 gap-5 h-16 upto-lab-s:h-10 flex items-center w-full`}
         >
           <div className={"flex min-w-max items-center upto-lab-s:gap-3 gap-9"}>
             <Link title="Tidan Expenses" to="/" className="bg-none">
               <div
                 className={` ${
-                  darkMode === "dark" ? "lightLogo" : "darkLogo"
+                  darkMode === "dark" ? "lightLogoLarge" : "darkLogoLarge"
                 } upto-lab-s:h-4  `}
-              ></div>
+              ></div> 
             </Link>
             <div
               className="upto-lab-s:w-6 upto-lab-s:h-6 h-10 flex justify-center cursor-pointer items-center rounded dark:active:bg-slate-300 active:bg-slate-700 ease-linear duration-200"
@@ -99,10 +98,10 @@ const Nav = (props) => {
           >
             <div
               className={` ${
-                !navBar ? "upto-lab-s:-right-1/2" : "upto-lab-s:right-1"
+                !navBar ? "upto-lab-s:-right-1/2  upto-lab-s:w-0" : "upto-lab-s:right-1"
               }  upto-lab-s:bg-violet-300 ease-linear duration-200 upto-lab-s:absolute upto-lab-s:top-12 upto-lab-s:p-5 upto-lab-s:border upto-lab-s:border-emerald-500 upto-lab-s:rounded-lg upto-lab-s:dark:bg-black `}
             >
-              <ul className="flex text-xl upto-lab-s:flex-col upto-lab-s:text-violet-700 upto-lab-s:items-start gap-2 upto-lab-s:gap-4 dark:text-white">
+              <ul className="flex text-xl upto-lab-s:flex-col upto-lab-s:text-violet-700 upto-lab-s:items-start gap-2 upto-lab-s:gap-4 text-white">
                 <li className="flex">
                   <CustomLink to="/">
                     <span className="text-sm flex justify-center items-center gap-1">
@@ -116,7 +115,7 @@ const Nav = (props) => {
                     <CustomLink to={"/e-app/"+loggedUser.userId}>
                       <span className="text-sm flex justify-center items-center gap-1">
                         <BsSignpost2 />
-                      <h1 className="scrn-lap-L:hidden">Expenses App</h1>
+                      <h1 className="scrn-lap-L:hidden">Dashboard</h1>
                        </span>
                     </CustomLink>
                   </li>
@@ -141,7 +140,6 @@ const Nav = (props) => {
                   <CustomLink to="/Contact-us">
                     <span className="text-sm flex justify-center items-center gap-1">
                       <MdOutlineContactSupport /> Contact Us
-                    <h1 className="scrn-lap-S:hidden"></h1>
                      </span>
                   </CustomLink>
                 </li>
@@ -151,7 +149,6 @@ const Nav = (props) => {
                       <CustomLink to="/Login">
                         <span className="text-sm flex justify-center items-center gap-1">
                           <IoMdLogIn /> Log In
-                        <h1 className="scrn-lap-S:hidden"></h1>
                          </span>
                       </CustomLink>
                     </li>
@@ -159,7 +156,6 @@ const Nav = (props) => {
                       <CustomLink to="/Register">
                         <span className="text-sm font-thin flex justify-center items-center gap-1">
                           <BiUserPlus className="text-base" /> Register
-                        <h1 className="scrn-lap-S:hidden"></h1>
                          </span>
                       </CustomLink>
                     </li>
@@ -199,7 +195,7 @@ const Nav = (props) => {
                             }
                             className="px-5 py-3 rounded-t-md upto-lab-s:py-1 w-full hover:bg-violet-600 bg-stone-700 upto-lab-s:bg-gray-700 flex flex-col items-start cursor-pointer"
                           >
-                            <span className="hidden upto-lab-s:flex">
+                            <span className="hidden upto-lab-s:flex capitalize">
                               {loggedUser.userName || "undefined"}
                             </span>
                             <p className="cursor-pointer upto-lab-s:opacity-75 upto-lab-s:text-sm -mt-1 flex items-center gap-2 upto-lab-s:gap-1">
@@ -240,7 +236,7 @@ const Nav = (props) => {
         </nav>
       </div>
 
-      <div className="h-16 upto-lab-s:h-10 w-full"></div>
+      {/* <div className="h-16 upto-lab-s:h-10 w-full"></div> */}
       <Outlet />
     </>
   );

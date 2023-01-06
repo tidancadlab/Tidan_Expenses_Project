@@ -16,10 +16,18 @@
   width: 48px;
   height:48px;
 }
+.darkLogoLarge {
+  content: url(../../Images/LOGO/lightLogo.svg);
+  height: 48px;
+}
 
 .lightLogo {
   content: url(../../Images/LOGO/darkLogo1.svg);
   width: 48px;
+  height:48px;
+}
+.lightLogoLarge {
+  content: url(../../Images/LOGO/darkLogo.svg);
   height:48px;
 }
 
@@ -97,7 +105,7 @@ div {
 }
 
 .shad-2 {
-  box-shadow: 10px 10px 0px black;
+  box-shadow: 10px 10px 0px #12121369;
 }
 
 .shad:hover {
@@ -166,6 +174,28 @@ div {
 }
 .bg-img2 {
   background: linear-gradient(0deg, #4b5563 1%, #37415180 99%);
+}
+
+.bg-img4{
+  background-image: url(../../Images/homeBgLight.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 0px -210px;
+}
+.bg-img5{
+  background-image: url(../../Images/homeBgDark.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 0px -210px;
+}
+
+@media (max-width:1300px) {
+  .bg-img4{
+    background-position: 0px 0px;
+  }
+  .bg-img5{
+    background-position: 0px 0px;
+  }
 }
 .arrowMove {
   position: absolute;
@@ -323,4 +353,16 @@ background-repeat: no-repeat;
 
 .addExpForm div input[type="text"], input[type="number"]{
   /* width: 250px; */
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  background: transparent;
+  bottom: 0;
+  color: transparent;
+  cursor: pointer;
+  height: auto;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: auto;
 }

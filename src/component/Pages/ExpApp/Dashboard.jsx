@@ -23,8 +23,8 @@ function DashBoard(props) {
   const params = useParams();
   const [searchParams, SetSearchParams] = useSearchParams();
   props.titleName.innerHTML = "Dashboard";
-  const { loggedUser, setUrlParams } = props;
-  const [tran, setTran] = useState([]);
+  const { loggedUser, setUrlParams, setTransData, transData } = props;
+  const [tran, setTran] = useState(transData);
   const [tranStatus, setTranStatus] = useState("Approved");
   const [showAllExpenses, setShowAllExpenses] = useState(false);
   const receivedFund = 400000;
@@ -47,9 +47,16 @@ function DashBoard(props) {
       .then((response) => response.json())
       .then((data) => setTran(data));
   }
+
+  setTransData(tran);
+
   if (loggedUser.userId === params.id && tran.length <= 0) {
     callAPI();
   }
+
+  useEffect(() => {
+    callAPI();
+  }, []);
 
   for (const i of tran) {
     expensesFund += i.expAmount;
@@ -347,8 +354,8 @@ function DashBoard(props) {
                             {INRFormat(item.expAmount)}
                           </td>
                           <td>{item.expUploaded}</td>
-                          <td className="text-green-500">
-                            {item.expApprovalStatus}
+                          <td>
+                            {item.expApprovalStatus.toLowerCase() === "approved"? <span className="text-green-500 flex items-center gap-2"><BsPatchCheckFill/>Approved</span> : item.expApprovalStatus.toLowerCase() === "rejected"? <span className="text-red-500 flex items-center gap-2"><BsPatchQuestionFill/>Reject</span> : <span className="text-yellow-500 flex items-center gap-2"><BsPatchExclamationFill/>Pending</span>}
                           </td>
                           {/* <td><button className="border border-black hover:bg-black hover:text-white px-3 py-0.5 rounded my-1">View</button></td> */}
                         </tr>

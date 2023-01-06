@@ -9,20 +9,20 @@ import ProgressRound from "./contenet/PropgressRound";
 import AddNewExpenses from "./contenet/AddExpensesPage";
 Chart.register(CategoryScale);
 
-let date = [];
-let amount = [];
+// let date = [];
+// let amount = [];
 
-axios
-  .get("/addExpenses")
-  .then((res) => {
-    for (const dataObj of res.data) {
-      date.push(moment(dataObj.expDate).format("DD/M"));
-      amount.push(parseInt(dataObj.expAmount));
-    }
-  })
-  .catch((err) => {
-    console.log("Server not working to push the data", err.response.status);
-  });
+// axios
+//   .get("/addExpenses")
+//   .then((res) => {
+//     for (const dataObj of res.data) {
+//       date.push(moment(dataObj.expDate).format("DD/M"));
+//       amount.push(parseInt(dataObj.expAmount));
+//     }
+//   })
+//   .catch((err) => {
+//     console.log("Server not working to push the data", err.response.status);
+//   });
 
 function Graph({ titleName }) {
   titleName.innerHTML = "DATA Graph";
@@ -31,7 +31,7 @@ function Graph({ titleName }) {
 
   return (
     <>
-    <AddNewExpenses/>
+    {/* <AddNewExpenses/> */}
       {/* <div className="m-auto w-screen h-screen flex justify-center bg-black"> */}
         {/* <Line
           data={{
