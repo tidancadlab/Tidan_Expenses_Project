@@ -1,31 +1,50 @@
 import { BsCaretDownFill, BsSearch, BsShop, BsX } from "react-icons/bs";
 import moment from "moment/moment";
 import { useEffect, useState } from "react";
-import ExpView from "./contenet/ExpView";
+import ExpView from "../../../component/Pages/ExpApp/contenet/ExpView";
 import notFound from "../../../Images/notFound.svg";
-import ApproveExpenses from "./contenet/ApproveExpenses";
+import ApproveExpenses from "../../../component/Pages/ExpApp/contenet/ApproveExpenses";
 import { createSearchParams, useSearchParams } from "react-router-dom";
-import PropgressRound from "./contenet/PropgressRound";
+import PropgressRound from "../../../component/Pages/ExpApp/contenet/PropgressRound";
+import { CardApprove } from "../../../component/Pages/ExpApp/Expenses/CradTran";
 
 localStorage.setItem("notFoudImg", notFound);
 const notFoundImg = localStorage.getItem("notFoundImg");
 
 function Approval(props) {
   //<-----Variables------>
-  const { titleName, loggedUser, transData } = props;
+  const { titleName, loggedUser, transData, allUser } = props;
   titleName.innerHTML = "Approval-Tidan Expenses";
-  const [tran, setTran] = useState(transData);
+  const [tran, setTran] = useState([]);
   let [currentPageNumber, setCurrentPageNumber] = useState(0);
   const [pageRefresh, setPageRefresh] = useState(true);
   const [userPtyData, setUserPtyData] = useState({});
 
   //<------Fetch API----->
   useEffect(() => {
-    fetch("https://tidan-e-app.onrender.com/addExpenses")
-      .then((response) => response.json())
-      .then((data) => setTran(data));
+    if (loggedUser) {
+      getData();
+    }
   }, [pageRefresh]);
 
+  const getData = async () => {
+    const { userId, userProperty } = loggedUser;
+    await fetch("http://localhost:8000/approveExpenses", {
+      method: "POST",
+      crossDomain: true,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        reportingOfficer: userId,
+        userLevel: userProperty.userLevel,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => setTran(data));
+  };
   useEffect(() => {
     if (loggedUser.userId !== undefined) {
       const { userId } = loggedUser;
@@ -59,7 +78,7 @@ function Approval(props) {
   /// <-------Array Filter by user------->
   const filteredTranArray = tran.filter(function (id) {
     if (loggedUser.userProperty !== undefined) {
-      return id.userLevel < loggedUser.userProperty.userLevel && id.expApprovalStatus === "pending";
+      return id.expApprovalStatus === "pending";
     }
   });
 
@@ -126,11 +145,11 @@ function Approval(props) {
       <div
         className={`${
           darkMode === "dark" ? "bg-img" : "bg-img3"
-        } min-h-screen h-full pt-16`}
+        } min-h-screen h-full pt-16 scrn-lap-S:pt-20`}
       >
-        <div className="flex justify-center">
-          <div className="container p-2 border-black dark:border-white rounded-3xl">
-            <div className="flex justify-between p-3 dark:text-white">
+        <div className="flex scrn-lap-S:block justify-center">
+          <div className="p-2 border-black dark:border-white rounded-3xl">
+            <div className="flex justify-between p-3 dark:text-white scrn-lap-S:hidden">
               <div>
                 <p className="text-3xl font-Kalam">Approval Sheet</p>
               </div>
@@ -170,7 +189,8 @@ function Approval(props) {
             </div>
             {/* Data for Approval*/}
             {tran.length > 0 ? (
-              <div className="dataDiv rounded px-2 py-2 dark:text-white bg-white dark:bg-[#212121]">
+              <>
+              <div className="scrn-lap-S:hidden dataDiv rounded px-2 py-2 dark:text-white bg-white dark:bg-[#212121]">
                 <ul className="flex justify-around rounded-t py-2 items-center bg-[#FCE742] text-black divide-x divide-dashed divide-[#FC8874] dark:divide-white border-b border-dashed border-white dark:border-white">
                   <li className="cursor-pointer w-[150px]  font-Kalam">
                     Bill Date <BsCaretDownFill />
@@ -217,10 +237,12 @@ function Approval(props) {
                         </li>
                         <li className="w-28 font-Kalam">{item.expAmount}</li>
                         <li className="w-24 text-sm">
-                          <span className="text-blue-500 underline cursor-pointer">
-                            {item.billFile || (
+                          <span className="">
+                            {(item.attachment?item.attachment.name !== undefined : item.attachment) ? (
+                              <a href={item.attachment.data} download={item.attachment.name} className="text-blue-500 underline cursor-pointer">{item.attachment.name}</a>
+                            ) : (
                               <span className="cursor-auto text-white no-underline">
-                                N/A
+                                No Attach
                               </span>
                             )}
                           </span>
@@ -287,6 +309,12 @@ function Approval(props) {
                   </div>
                 )}
               </div>
+              <div className="hidden scrn-lap-S:block">
+                <div>
+                  {tran.map(v => <CardApprove v={v} allUser={allUser}/>)}
+                </div>
+              </div>
+              </>
             ) : (
               <div className="flex text-xl justify-center pt-20 text-black">
                 <PropgressRound />

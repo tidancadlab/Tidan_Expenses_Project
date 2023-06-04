@@ -1,50 +1,95 @@
-import React, { useState } from "react";
 import "../css/NavBar.css";
+import React, { useState, useEffect } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import { expensesData } from "../js/FetchModule";
 import LocalData from "../../json/Data.json";
-import { createBrowserHistory } from "history";
 import HomeFirst from "./HomeCont";
 import Nav from "../js/Nav";
-import { Routes, Route, Navigate, useParams } from "react-router-dom";
 import LoginPage from "./Login";
 import AppExpenses from "./ExpApp/AppExpenses";
-import DashBoard from "./ExpApp/Dashboard";
-import AddExpenses from "./ExpApp/AddExpenses";
-import Error404 from "../js/Err404";
-import Help from "./ExpApp/Help";
-import Approval from "./ExpApp/Approval";
+import AddExpenses from "../../Pages/EApp/NewExpenses";
+import Help from "../../Pages/EApp/Help";
+import Approval from "../../Pages/EApp/Approval";
 import Graph from "./ExpApp/Graph";
 import Register from "./Register";
 import Setting from "./ExpApp/contenet/Setting";
-import { useEffect } from "react";
-import LoginAgain from "./ExpApp/contenet/LoginAgain";
 import ConstructPage from "./ExpApp/contenet/ConstrectPage";
-import ExpView from "./ExpApp/contenet/ExpView";
 import ProtectedRoute from "../js/ProtectedRoute";
-import { useCookies } from "react-cookie";
+import Progress from "../Progress";
+import { useDispatch, useSelector } from "react-redux";
+import { getTran } from "../../Store/TranStore";
+import { loggedUser as user } from "../../Store/user";
+import { userProperty } from "../../Store/userProperty";
+import Dbd from "../../Pages/EApp/Dashboard/Dbd";
+import Admin from "../../Pages/EApp/Admin";
 
 function NavBar({ titleName }) {
-  const history = createBrowserHistory();
+  const dispatch = useDispatch();
   const [darkMode, setDarkMode] = useState(localStorage.getItem("DarkMode"));
   localStorage.setItem("DarkMode", darkMode);
-  const [userPtyData, setUserPtyData] = useState("");
-  const [loggedUser, setLoggedUser] = useState({});
+  const abc = useSelector((state) => state);
+  const loggedUser = abc.user;
+  const tran = abc.tran;
   const [transData, setTransData] = useState([]);
   let [urlParams, setUrlParams] = useState("");
   const token1 = localStorage.getItem("token");
-  const [cookies, setCookies, dltCookies] = useCookies();
+  const isLoggedIn = token1 ? loggedUser.userId !== undefined : true;
+  const [allUser, setAllUser] = useState([]);
+  const [updateData, setUpdateData] = useState({ status: true, upT: 4 });
 
   useEffect(() => {
     if (!!token1) {
       API();
     }
-    // console.log(!(!token1) && loggedUser.userId === undefined);
   }, []);
 
   //<-----fetch API---->
   const API = async () => {
-    const userData = await fetch(
-      "https://tidan-e-app.onrender.com/loggedUserData",
-      {
+    await fetch("http://localhost:8000/loggedUserData", {
+      method: "POST",
+      crossDomain: true,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({ token: token1 }),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        dispatch(user(result));
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  useEffect(() => {
+    if (token1) {
+      fetch("http://localhost:8000/allUser", {
+        method: "GET",
+      })
+        .then((res) => res.json())
+        .then((data) => setAllUser(data));
+    }
+  }, []);
+
+  const DataApi = async () => {
+    const rs = await expensesData(
+      `http://localhost:8000/dashBoard`,
+      loggedUser.userId
+    );
+    rs.json()
+      .then((a) => {
+        dispatch(getTran(a));
+      })
+      .catch((err) => console.log(err));
+    setUpdateData({ status: rs.code, upT: 0 });
+  };
+
+  useEffect(() => {
+    if (loggedUser.userId !== undefined) {
+      const { userId } = loggedUser;
+      fetch("http://localhost:8000/userDataProperty", {
         method: "POST",
         crossDomain: true,
         headers: {
@@ -52,40 +97,28 @@ function NavBar({ titleName }) {
           Accept: "application/json",
           "Access-Control-Allow-Origin": "*",
         },
-        body: JSON.stringify({ token: token1 }),
-      }
-    )
-      .then((response) => response.json())
-      .then((result) => setLoggedUser(result))
-      .catch((error) => console.log("error", error));
-  };
+        body: JSON.stringify({ userId }),
+      })
+        .then((r) => r.json())
+        .then((a) => dispatch(userProperty(a)));
+    } else {
+      return;
+    }
+  }, [loggedUser]);
+
+  if (loggedUser.userId && updateData.status) {
+    DataApi();
+  }
+
+  useEffect(() => {
+    DataApi();
+  }, [abc.refresh]);
 
   return (
     <>
       <div className={` ${darkMode === "dark" ? "light" : "dark"}`}>
         <Routes>
-          <Route
-            path=""
-            element={
-              <Nav
-                setDarkMode={setDarkMode}
-                darkMode={darkMode}
-                data={LocalData}
-                loggedUser={loggedUser}
-              />
-            }
-          >
-            <Route path="*" element={<Error404 titleName={titleName} />} />
-            <Route
-              path="/"
-              element={
-                <HomeFirst
-                  titleName={titleName}
-                  data={LocalData}
-                  loggedUser={loggedUser}
-                />
-              }
-            />
+          <Route>
             {!token1 ? (
               <>
                 <Route
@@ -105,23 +138,9 @@ function NavBar({ titleName }) {
                 <Route path={"/Register"} element={<Navigate to="/" />} />
               </>
             )}
-
-            <Route
-              path="/Blog"
-              element={<ConstructPage titleName={titleName} />}
-            />
-            <Route
-              path="/About-us"
-              element={<ConstructPage titleName={titleName} />}
-            />
-            <Route
-              path="/Contact-us"
-              element={<ConstructPage titleName={titleName} />}
-            />
           </Route>
-          {token1 ? (
+          {token1 && loggedUser.userId !== undefined ? (
             <Route
-              path="/e-app/:id/"
               element={
                 <AppExpenses
                   titleName={titleName}
@@ -134,71 +153,55 @@ function NavBar({ titleName }) {
               }
             >
               <Route
-                path="/e-app/:id/Dashboard"
+                path="/"
                 element={
-                  <DashBoard
+                  <Dbd
                     titleName={titleName}
                     data={LocalData}
                     loggedUser={loggedUser}
                     setTransData={setTransData}
-                    transData ={transData}
+                    transData={tran}
                   />
                 }
               />
               <Route
-                path="/e-app/:id/"
-                element={
-                  <Navigate to={`/e-app/${loggedUser.userId}/Dashboard`} />
-                }
-              />
-              <Route
-                path="/e-app/:id/expenses"
+                path="/expenses"
                 element={
                   <AddExpenses
                     titleName={titleName}
                     expTransaction={LocalData.expTransaction}
                     loggedUser={loggedUser}
-                    transData ={transData}
+                    transData={transData}
                   />
                 }
               />
               <Route
-                path="/e-app/:id/approval"
+                path="/approval"
                 element={
                   <Approval
                     titleName={titleName}
                     expTransaction={LocalData.expTransaction}
                     loggedUser={loggedUser}
-                    transData ={transData}
+                    transData={transData}
+                    allUser={allUser}
                   />
                 }
               />
+              <Route path="/help" element={<Help/>} />
               <Route
-                path="/e-app/:id/graph"
+                path="/graph"
                 element={
-                  <Graph
-                    titleName={titleName}
-                  />
+                  <Graph tran={tran} allUser={allUser} titleName={titleName} />
                 }
               />
+              <Route path="/admin" element={<Admin />} />
               <Route
-                path="/e-app/:id/help"
-                element={
-                  <ProtectedRoute
-                    titleName={titleName}
-                    Component={Help}
-                    loggedUser={loggedUser}
-                  />
-                }
+                path="/setting"
+                element={<Setting titleName={titleName} />}
               />
-              <Route
-                path="/e-app/:id/setting"
-                element={<Setting titleName={titleName} history={history} />}
-              />
-              {/* <Route path="/e-app/dashboard/:id" element={<Setting />} /> */}
             </Route>
           ) : (
-            <Route path={"/e-app/:id/*"} element={<Navigate to="/Login" />} />
+            <Route path={"/*"} element={<Navigate to="/Login" />} />
           )}
         </Routes>
       </div>

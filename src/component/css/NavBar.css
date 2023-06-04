@@ -1,37 +1,69 @@
 @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Diplomata+SC&family=Kalam:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Itim&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Trochut:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Trispace:wght@100;200;300;400;500;600;700;800&display=swap');
 
+*{
+  transition: ease-in-out;
+  animation-duration: 500ms;
+}
 .font-Diplomata {
   font-family: "Diplomata SC", cursive !important;
 }
-.font-Kalam{
+.font-Kalam {
   font-family: "Kalam", cursive !important;
 }
 .font-Orbitron {
   font-family: "Orbitron", sans-serif !important;
 }
 
+.flip-card:hover, flip-card-ch{
+  transform: rotateY(180deg);
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+
+.bg-img6{
+  background-image: url(../../Images/BG/bgImg1.png);
+  background-size: cover;
+}
+.bg-card1{
+  background-image: url(../../Images/BG/bgCard2.png);
+  background-size: 300px;
+  background-position: top right;
+}
 .darkLogo {
-  content: url(../../Images/LOGO/lightLogo1.svg);
-  width: 48px;
-  height:48px;
+  background-image: url(../../Images/LOGO/LOGO\ T.png);
+  width: 108px;
+  height: 112px;
+  margin-top: 5px;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 .darkLogoLarge {
-  content: url(../../Images/LOGO/lightLogo.svg);
+  content: url(../../Images/LOGO/LOGO\ T.png);
   height: 48px;
 }
-
+.logoLoading {
+  background-image: url(../../Images/LOGO/LOGO\ T.png);
+  height: 200px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
 .lightLogo {
-  content: url(../../Images/LOGO/darkLogo1.svg);
+  background-image: url(../../Images/LOGO/LOGO\ T.png);
   width: 48px;
-  height:48px;
+  height: 51.5px;
+  margin-top: 5px;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 .lightLogoLarge {
-  content: url(../../Images/LOGO/darkLogo.svg);
-  height:48px;
+  content: url(../../Images/LOGO/LOGO\ T.png);
+  height: 48px;
 }
-
-
 
 body::-webkit-scrollbar,
 div::-webkit-scrollbar {
@@ -54,6 +86,10 @@ div::-webkit-scrollbar-thumb {
   background-color: rgba(10, 10, 10, 0.411);
   border-radius: 10px;
   border: 1ps solid;
+}
+
+.hiddenScrl::-webkit-scrollbar {
+  display: none;
 }
 
 body,
@@ -110,12 +146,17 @@ div {
 
 .shad:hover {
   transition: cubic-bezier(0.895, 0.03, 0.685, 0.22);
-  transition-duration: 0.4s;
+  transition-duration: 0.0s;
   box-shadow: #fc8874 0px 0px 0px 2px inset, transparent 10px -10px 0px -3px,
     rgb(31, 193, 27) 10px -10px, transparent 20px -20px 0px -3px,
     rgb(255, 217, 19) 20px -20px, transparent 30px -30px 0px -3px,
     rgb(255, 156, 85) 30px -30px, transparent 40px -40px 0px -3px,
     rgb(255, 85, 85) 40px -40px;
+}
+.shad:hover {
+  transition: cubic-bezier(0.895, 0.03, 0.685, 0.22);
+  transition-duration: 0.1s;
+  box-shadow: #fc8874 0px 0px 0px 2px inset;
 }
 .shad-d {
   box-shadow: blue 0px 0px 0px 2px inset, rgb(0, 0, 0) 10px -10px 0px -3px,
@@ -148,6 +189,10 @@ div {
 
 } */
 
+.polygon1{
+  clip-path: polygon(85% 0, 100% 50%, 85% 100%, 0% 100%, 15% 50%, 0 0);
+}
+
 .testUl tr th {
   display: flex;
   justify-content: flex-end;
@@ -176,24 +221,24 @@ div {
   background: linear-gradient(0deg, #4b5563 1%, #37415180 99%);
 }
 
-.bg-img4{
+.bg-img4 {
   background-image: url(../../Images/homeBgLight.svg);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 0px -210px;
 }
-.bg-img5{
+.bg-img5 {
   background-image: url(../../Images/homeBgDark.svg);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 0px -210px;
 }
 
-@media (max-width:1300px) {
-  .bg-img4{
+@media (max-width: 1300px) {
+  .bg-img4 {
     background-position: 0px 0px;
   }
-  .bg-img5{
+  .bg-img5 {
     background-position: 0px 0px;
   }
 }
@@ -226,6 +271,40 @@ div {
     opacity: 0;
   }
 }
+.plsAnminate::after {
+  content: "";
+  position: absolute;
+  display: block;
+  height: 50px;
+  z-index: -10;
+  width: 50%;
+  background: #4efcb1;
+  border-radius: 4px;
+  top: 0;
+  left: 4px;
+  overflow: hidden;
+  animation-name: moveArrow;
+  animation-duration: 2s;
+  animation-delay: -1s;
+  animation-iteration-count: infinite;
+  transform: translateX(0%);
+}
+
+@keyframes moveArrow {
+  0% {
+    transform: translateX(0%);
+    /* width: calc(100% - 16px); */
+  }
+  50% {
+    /* width: 0%; */
+    transform: translateX(calc(100% - 5px));
+  }
+  100% {
+    transform: translateX(0%);
+    /* width: calc(100% - 16px); */
+    /* display: none; */
+  }
+}
 
 .bg-css {
   background: linear-gradient(20deg, #fc8874 9%, #4efcb1 200%);
@@ -256,18 +335,24 @@ div {
 
 .progressAnimation {
   animation-name: progressing;
-  animation-duration: 10s;
-  animation-delay: 0.1s;
-  animation-iteration-count: initial;
+  animation-duration: 1s;
+  animation-delay: 0s;
+  animation-iteration-count: infinite;
   width: 100%;
 }
 
 @keyframes progressing {
   0% {
-    width: 0%;
+    width: 100%;
+    transform: translateX(-20px);
+  }
+  50% {
+    width: 100%;
+    transform: translateX(20px);
   }
   100% {
     width: 100%;
+    transform: translateX(-20px);
   }
 }
 
@@ -312,14 +397,9 @@ p {
   transform: rotate(45deg) */
 }
 
-table td{
-  padding: 5px 10px;
-  border-left: 1px dashed rgba(0, 0, 0);
-}
-
-.tableBG{
-background-image: url(../../Images/Tabletlogin.svg);
-background-repeat: no-repeat;
+.tableBG {
+  background-image: url(../../Images/Tabletlogin.svg);
+  background-repeat: no-repeat;
 }
 
 .file-input__input {
@@ -350,11 +430,11 @@ background-repeat: no-repeat;
   margin-right: 4px;
 }
 
-
-.addExpForm div input[type="text"], input[type="number"]{
+.addExpForm div input[type="text"],
+input[type="number"] {
   /* width: 250px; */
 }
-input[type="date"]::-webkit-calendar-picker-indicator {
+.dateInp input[type="date"]::-webkit-calendar-picker-indicator {
   background: transparent;
   bottom: 0;
   color: transparent;
@@ -365,4 +445,68 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   right: 0;
   top: 0;
   width: auto;
+}
+
+.Ellipse2 {
+  position: absolute;
+  max-width: 268px;
+  width: 100%;
+  height: 139px;
+  clip-path: ellipse(147px 63% at top center);
+}
+
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 33px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #fff;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
 }

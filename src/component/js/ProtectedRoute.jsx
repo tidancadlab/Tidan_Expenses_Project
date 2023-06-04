@@ -5,7 +5,7 @@ function ProtectedRoute(props) {
   const { Component, loggedUser } = props;
   const Navigate = useNavigate();
   const params = useParams()
-  console.log(params);
+  console.log(Component);
   useEffect(() => {
     if (params.id !== loggedUser.userId) {
       Navigate("/login");

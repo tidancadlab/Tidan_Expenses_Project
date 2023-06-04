@@ -16,7 +16,7 @@ function Register(props) {
 
   const userRegister = async (e) => {
     e.preventDefault();
-    fetch("https://tidan-e-app.onrender.com/", {
+    fetch("http://localhost:8000/registerUser", {
       method: "POST",
       crossDomain: true,
       headers: {
@@ -38,17 +38,16 @@ function Register(props) {
 
   return (
     <>
-      <div className="h-[calc(100vh-64px)] min-h-[800px] w-screen relative flex justify-center bg-gray-400 dark:bg-gray-600 overflow-hidden">
+      <div className="h-[calc(100vh-0px)] min-h-[800px] w-screen relative flex justify-center bg-slate-900 ">
         <div className="relative flex justify-center items-center w-[1200px] h-full">
-          <div className="absolute top-32">
-            <img className="h-[800px]" src={tableBGImg} alt="" />
-          </div>
-          <div className="min-w-[300px] flex flex-col items-center max-w-sm w-full rounded-3xl p-2 bg-[#AACBFF] bg-opacity-50 backdrop-blur-md py-20 z-10">
-            <div className="lightLogo w-48 -mt-10 mb-10"></div>
+          <div className="min-w-[300px] flex flex-col items-center max-w-sm w-full rounded-3xl p-2 bg-slate-800 py-20 z-10">
+            <div className="bg-white p-4 rounded-full">
+              <div className="lightLogo -mt-0.5"></div>
+            </div>
             <p>{regWarn}</p>
             <form
               method="POST"
-              className="flex flex-wrap relative rounded-xl gap-4 text-sm w-full p-14"
+              className="flex flex-wrap relative rounded-xl gap-4 text-sm w-full p-10"
             >
               <div className="relative w-full">
                 <input
@@ -215,15 +214,12 @@ function Register(props) {
                 </button>
               </div>
             </form>
-            <div className="flex flex-wrap relative rounded gap-1 w-full p-5">
+            <div className="flex flex-wrap relative rounded gap-1 w-full p-5 text-white font-thin">
               <span>Have you account ? please</span>
-              <Link to="/Login" className="text-blue-500" type="submit">
+              <Link to="/Login" className="text-blue-300" type="submit">
                 login...
               </Link>
             </div>
-          </div>
-          <div className="absolute z-10 right-40 top-96 pointer-events-none">
-            <img className="h-[500px]" src={carBGImg} alt="" />
           </div>
         </div>
       </div>

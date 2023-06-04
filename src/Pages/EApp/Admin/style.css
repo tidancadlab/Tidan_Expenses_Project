@@ -1,0 +1,13 @@
+.address div input:not(#male, #female, #unknown) , .address div select {
+    width: 250px;
+    height: 50px;
+    transition: ease-in-out;
+    animation-duration: 300ms;
+}
+.address div{
+margin-bottom: 8px;
+}
+
+.bg:hover > .bgc {
+border-color: pink;
+}

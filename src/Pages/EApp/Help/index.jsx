@@ -1,8 +1,9 @@
-function Help({titleName}) {
-  // titleName.innerHTML = "Help Section"
+import UserCard from "../Admin/userCard";
+
+function Help() {
   return (
     <>
-      <div className="min-h-[calc(100vh-56px)] dark:bg-gray-900 bg-gray-300 dark:text-white flex items-center justify-center">
+      {/* <div className="min-h-[calc(100vh)] dark:bg-gray-900 bg-gray-300 dark:text-white flex items-center justify-center">
         <div className="max-w-sm p-8 bg-yellow-500 shadow-2xl dark:shadow-black dark:bg-violet-800 rounded w-full">
           <form action="submit" className="">
             <div className="flex flex-col gap-2">
@@ -66,7 +67,8 @@ function Help({titleName}) {
             </div>
           </form>
         </div>
-      </div>
+      </div> */}
+      <UserCard/>
     </>
   );
 }

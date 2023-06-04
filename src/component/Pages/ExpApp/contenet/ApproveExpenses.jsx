@@ -14,7 +14,7 @@ function ApproveExpenses({ item, setPageRefresh }) {
   if (!waitingBtnAnimation) {
     const animationTimeOut = setTimeout(() => {
       setWaitingBtnAnimation(true);
-      setSubmitBtn("Retry")
+      setSubmitBtn("Retry");
       clearTimeout(animationTimeOut);
     }, 10000);
   }
@@ -90,11 +90,11 @@ function ApproveExpenses({ item, setPageRefresh }) {
             value={expUpdateData.expComments}
             onChange={handleChange}
             className={`${
-              expUpdateData.expApprovalStatus === "Rejected"
+              expUpdateData.expApprovalStatus !== ""
                 ? "cursor-text text-black"
                 : "opacity-10"
             } rounded px-2 py-[2px] leading-4 w-full min-h-[32px] max-h-32 border focus:outline-none focus:bg-green-300 dark:border-none border-black ease-in-out duration-200`}
-            disabled={expUpdateData.expApprovalStatus !== "Rejected"}
+            disabled={expUpdateData.expApprovalStatus === ""}
             type="text"
             name="expComments"
             id=""
@@ -114,11 +114,15 @@ function ApproveExpenses({ item, setPageRefresh }) {
           </button>
         ) : (
           <button
+            disabled={expUpdateData.expApprovalStatus === ""}
             onClick={() => {
               approveTransaction(item._id);
             }}
-            className={`cursor-pointer bg-blue-500 hover:bg-white hover:text-black dark:bg-blue-400 dark:hover:bg-black dark:hover:text-white dark:hover:border-blue-700 w-full py-1 rounded border border-transparent hover:border-black`}
-            // disabled={!item.userLevel >= 0 ? true : false}
+            className={`bg-blue-500  dark:bg-blue-400  w-full py-1 rounded border border-transparent  ${
+              expUpdateData.expApprovalStatus === ""
+                ? "opacity-20"
+                : "opacity-100 hover:bg-white hover:text-black dark:hover:bg-black dark:hover:text-white dark:hover:border-blue-700 hover:border-black"
+            }`}
           >
             {!waitingBtnAnimation ? <WaitingRoundAnimation /> : submitBtn}
           </button>

@@ -11,10 +11,8 @@ function ExpView(props) {
     idxSelectedItem,
     setIdxSelectedItem,
     crPageNum,
-    titleName
   } = props;
-  console.log(selectedExpenses.expComments.length);
-titleName.innerHTML = selectedExpenses.expItem || "View Expenses"
+  document.title = selectedExpenses.expItem || "View Expenses";
   return (
     <>
       <div
@@ -141,14 +139,34 @@ titleName.innerHTML = selectedExpenses.expItem || "View Expenses"
                   <p>{selectedExpenses.expApprovedOn || "Still Pending"}</p>
                 </li>
                 <li className="h-32">
-                  <p>{selectedExpenses ? selectedExpenses.expComments :  "----"}</p>
+                  <p>
+                    {selectedExpenses ? selectedExpenses.expComments : "----"}
+                  </p>
                 </li>
               </ul>
             </div>
-            <div className="my-2 flex justify-center items-center rounded-md border border-dashed border-blue-600">
-              {!selectedExpenses || undefined ? (
-                <div>
-                  <img src={noAttachment} alt="" />
+            <div className="my-2 relative w-full max-w-xl flex justify-center items-center rounded-md border border-dashed border-blue-600">
+              {(selectedExpenses.attachment? selectedExpenses.attachment.name !== undefined : selectedExpenses.attachment) ? (
+                <div className="flex justify-center flex-col text-[#083863] dark:text-white underline underline-offset-4 gap-5">
+                  {selectedExpenses.attachment.type !== "application/pdf" ? (
+                    <img
+                      className="max-h-[630px]"
+                      src={selectedExpenses.attachment.data}
+                      alt=""
+                    />
+                  ) : (
+                    <a
+                      href={selectedExpenses.attachment.data}
+                      download={selectedExpenses.attachment.name}
+                      className="text-blue-500 cursor-pointer"
+                    >
+                      Download Pdf
+                    </a>
+                  )}
+                  <span className="absolute bottom-4 p-2 rounded bg-black bg-opacity-60 left-1/2 -translate-x-1/2">
+                    {selectedExpenses.attachment.name}.
+                    {selectedExpenses.attachment.type.split("/")[1]}
+                  </span>
                 </div>
               ) : (
                 <div className="flex flex-col text-xl text-[#083863] dark:text-white underline underline-offset-4 gap-5 uppercase">

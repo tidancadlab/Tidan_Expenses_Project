@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useMatch, useResolvedPath } from "react-router-dom";
+import { Link, useMatch, useResolvedPath, Outlet } from "react-router-dom";
 import {
   BsFillSunFill,
   BsFillMoonFill,
@@ -10,14 +10,13 @@ import {
   BsReverseLayoutTextSidebarReverse,
 } from "react-icons/bs";
 import { TiThMenu } from "react-icons/ti";
-import { CiUser } from "react-icons/ci";
 import { ImBlog } from "react-icons/im";
 import { VscClose } from "react-icons/vsc";
 import { HiOutlineHome } from "react-icons/hi";
-import { Outlet } from "react-router-dom";
 import { IoIosLogOut, IoMdLogIn } from "react-icons/io";
 import { MdOutlineContactSupport } from "react-icons/md";
 import { BiUserPlus } from "react-icons/bi";
+import WaitingRoundAnimation from "../Pages/ExpApp/contenet/WaitningRoundAnimation";
 
 function CustomLink({ to, children, ...props }) {
   const resolvedPath = useResolvedPath(to);
@@ -25,15 +24,13 @@ function CustomLink({ to, children, ...props }) {
   return (
     <Link
       className={` ${
-        isActive
-          ? "bg-[#381D71] border-[#381D71] text-"
-          : "hover:border-transparent hover:bg-orange-300 dark:border-orange-300 hover:text-orange-900"
-      } mx-2 flex border px-2.5 py-1 rounded-full ease-in-out duration-100`}
+        isActive ? "text-[#023E73]" : "hover:text-[#023E73]"
+      } mx-2 flex px-1 py-1 ease-in-out font-thin duration-100`}
       to={to}
       {...props}
     >
       {" "}
-      {children}{" "}
+      {children}
     </Link>
   );
 }
@@ -43,14 +40,16 @@ const Nav = (props) => {
   const [navBar, setNavBar] = useState(false);
   const [profileDrop, setProfileDrop] = useState(true);
   const [expendUser, setExpendUser] = useState(true);
-  const [viewProfile, setViewProfile] = useState(false);  // this is for profile view
+  const [viewProfile, setViewProfile] = useState(false); // this is for profile view
   const token = localStorage.getItem("token");
-
+  // console.log(loggedUser);
+  const random = Math.floor(Math.random() * (0 - 360) + 360);
+  const random2 = Math.floor(Math.random() * (0 - random / 2) + random / 2);
   return (
     <>
       <div className="z-10 w-full scrn-4k:fixed">
         <nav
-          className={`upto-lab-s:px-2 justify-around dark:bg-gray-700 upto-lab-s:justify-between upto-lab-s:gap-2 gap-5 h-16 upto-lab-s:h-10 flex items-center w-full`}
+          className={`upto-lab-s:px-2 justify-around upto-lab-s:justify-between bg-white upto-lab-s:gap-2 gap-5 h-16 upto-lab-s:h-10 flex items-center w-full`}
         >
           <div className={"flex min-w-max items-center upto-lab-s:gap-3 gap-9"}>
             <Link title="Tidan Expenses" to="/" className="bg-none">
@@ -58,9 +57,9 @@ const Nav = (props) => {
                 className={` ${
                   darkMode === "dark" ? "lightLogoLarge" : "darkLogoLarge"
                 } upto-lab-s:h-4  `}
-              ></div> 
+              ></div>
             </Link>
-            <div
+            {/* <div
               className="upto-lab-s:w-6 upto-lab-s:h-6 h-10 flex justify-center cursor-pointer items-center rounded dark:active:bg-slate-300 active:bg-slate-700 ease-linear duration-200"
               onClick={() =>
                 setDarkMode((darkMode) =>
@@ -73,90 +72,72 @@ const Nav = (props) => {
               ) : (
                 <BsFillMoonFill className=" upto-lab-s:h-4 upto-lab-s:w-4 h-6 w-6 fill-green-600 ease-linear duration-200" />
               )}
-            </div>
+            </div> */}
           </div>
-          <div className="relative upto-lab-s:w-full max-w-[350px] w-full upto-lab-s:min-w-[250px] h-8 upto-lab-s:h-8 scrn-lap-L:max-w-[200px]  ease-in-out duration-300 dark:border-none">
-            <input
-              className="h-full pr-12 border-red-400 border dark:border-none w-full px-5 scrn-mob:max-w-fit rounded-full outline-none dark:bg-gray-500 bg-gray-100 text-black dark:text-white placeholder:text-sm focus:bg-gray-400 focus:text-violet-900 placeholder:text-gray-500 placeholder:dark:text-white"
-              type="text"
-              name="Search"
-              placeholder="SEARCH"
-              id=""
-            />
-            <div className="absolute cursor-pointer flex items-center justify-center rounded-r-full w-10 h-full active:bg-red-300 ease-in-out duration-150 top-1/2 right-0 -translate-y-1/2">
-              <BsSearch className="dark:fill-white" />
-            </div>
-          </div>
-          <nav
-            className="flex flex-row items-start justify-center"
-            tabIndex={1}
-            onBlur={() => {
-              setTimeout(() => {
-                setNavBar(false);
-              }, 300);
-            }}
-          >
+          <nav className="flex flex-row items-start justify-center">
             <div
               className={` ${
-                !navBar ? "upto-lab-s:-right-1/2  upto-lab-s:w-0" : "upto-lab-s:right-1"
+                !navBar
+                  ? "upto-lab-s:-right-1/2  upto-lab-s:w-0"
+                  : "upto-lab-s:right-1"
               }  upto-lab-s:bg-violet-300 ease-linear duration-200 upto-lab-s:absolute upto-lab-s:top-12 upto-lab-s:p-5 upto-lab-s:border upto-lab-s:border-emerald-500 upto-lab-s:rounded-lg upto-lab-s:dark:bg-black `}
             >
-              <ul className="flex text-xl upto-lab-s:flex-col upto-lab-s:text-violet-700 upto-lab-s:items-start gap-2 upto-lab-s:gap-4 text-white">
+              <ul className="flex text-xl upto-lab-s:flex-col upto-lab-s:text-violet-700 upto-lab-s:items-start gap-4 upto-lab-s:gap-4">
                 <li className="flex">
                   <CustomLink to="/">
-                    <span className="text-sm flex justify-center items-center gap-1">
+                    <span className="text-xl flex justify-center items-center gap-1">
                       <HiOutlineHome />
-                    <h1 className="scrn-lap-L:hidden ">Home</h1>
-                     </span>
+                      <h1 className="scrn-lap-L:hidden ">Home</h1>
+                    </span>
                   </CustomLink>
                 </li>
                 {token && (
                   <li className="flex">
-                    <CustomLink to={"/e-app/"+loggedUser.userId}>
-                      <span className="text-sm flex justify-center items-center gap-1">
+                    <CustomLink to={"/e-app/" + loggedUser.userId}>
+                      <span className="text-xl flex justify-center items-center gap-1">
                         <BsSignpost2 />
-                      <h1 className="scrn-lap-L:hidden">Dashboard</h1>
-                       </span>
+                        <h1 className="scrn-lap-L:hidden">Dashboard</h1>
+                      </span>
                     </CustomLink>
                   </li>
                 )}
-                <li className="flex">
+                {/* <li className="flex">
                   <CustomLink to="/Blog">
                     <span className="text-sm flex justify-center items-center gap-1">
                       <ImBlog />
-                    <h1 className="scrn-lap-L:hidden"> Blog</h1>
-                     </span>
+                      <h1 className="scrn-lap-L:hidden"> Blog</h1>
+                    </span>
                   </CustomLink>
-                </li>
-                <li className="flex">
+                </li> */}
+                {/* <li className="flex">
                   <CustomLink to="/About-us">
                     <span className="text-sm flex justify-center items-center gap-1">
                       <BsReverseLayoutTextSidebarReverse />
-                    <h1 className="scrn-lap-L:hidden"> About US</h1>
-                     </span>
+                      <h1 className="scrn-lap-L:hidden"> About US</h1>
+                    </span>
                   </CustomLink>
-                </li>
-                <li className="flex">
+                </li> */}
+                {/* <li className="flex">
                   <CustomLink to="/Contact-us">
                     <span className="text-sm flex justify-center items-center gap-1">
                       <MdOutlineContactSupport /> Contact Us
-                     </span>
+                    </span>
                   </CustomLink>
-                </li>
+                </li> */}
                 {!token ? (
                   <>
                     <li className="flex">
                       <CustomLink to="/Login">
-                        <span className="text-sm flex justify-center items-center gap-1">
+                        <span className="text-xl flex justify-center items-center gap-1">
                           <IoMdLogIn /> Log In
-                         </span>
+                        </span>
                       </CustomLink>
                     </li>
                     <li className="flex">
                       <CustomLink to="/Register">
-                        <span className="text-sm font-thin flex justify-center items-center gap-1">
-                          <BiUserPlus className="text-base" /> Register
-                         </span>
+                        <span className="text-xl font-thin flex justify-center items-center gap-1">
+                          <BiUserPlus /> Register
+                        </span>
                       </CustomLink>
                     </li>
                   </>
@@ -172,11 +153,26 @@ const Nav = (props) => {
                       onMouseOut={() => {
                         setExpendUser(true);
                       }}
-                      className="flex absolute items-center gap-1 border dark:border-orange-300 border-black rounded-full cursor-pointer"
+                      className="flex absolute items-center gap-1 border-[#024959] rounded-full border cursor-pointer"
                     >
-                      <div className="flex justify-center items-center text-xl h-7 w-7 rounded-full"><CiUser/></div>
-                      <h1 hidden={expendUser && profileDrop}>
-                        {loggedUser.userName}
+                      <div
+                        className={`flex justify-center items-center h-7 w-7 uppercase rounded-full`}
+                      >
+                        {loggedUser.userName !== undefined ? (
+                          (loggedUser.userName || "").slice(0, 1)
+                        ) : (
+                          <WaitingRoundAnimation />
+                        )}
+                      </div>
+                      <h1
+                        className="uppercase -ml-[12.5px]"
+                        hidden={expendUser && profileDrop}
+                      >
+                        {loggedUser.userName !== undefined ? (
+                          (loggedUser.userName || "").slice(1)
+                        ) : (
+                          <WaitingRoundAnimation />
+                        )}
                       </h1>
                       <span hidden={expendUser && profileDrop}>
                         <BsCaretDown
